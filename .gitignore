@@ -25,3 +25,7 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Konteks agent & prompt internal tim (tidak ikut repositori)
+/AGENTS.md
+/AI-PROMPTS.md
