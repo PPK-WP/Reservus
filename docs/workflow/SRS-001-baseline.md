@@ -204,16 +204,18 @@ Hasil `php artisan test`: **27 passed (92 assertions), 0 failed**.
 ## 12. Riwayat Commit
 
 ```text
-a10e77c chore(baseline): inisialisasi proyek Laravel 13 + konfigurasi MySQL & WIB (SRS-001)
-4d6f2f6 feat(baseline): starter kit laravel/ui Bootstrap 5 + folder /views + lokalisasi id (SRS-001)
-df54045 feat(baseline): migration users(role/status), facilities, reservations, reports (SRS-001)
-9f7b47c feat(baseline): model kontrak E2 + AvailabilityService (SRS-001)
-f2952f8 feat(baseline): middleware role + satu file route per SRS (SRS-001, D-03)
-a531e7a feat(baseline): layout Bootstrap, komponen bersama, beranda per peran (SRS-001)
-4bc19a2 feat(baseline): seeder fixture bersama + factory model (SRS-001)
-f01581c test(baseline): uji AvailabilityService & gerbang akses baseline (SRS-001)
-d5a7c3e chore(baseline): template PR, folder docs, dan gating status akun pada /home (SRS-001)
-<hash>  docs(baseline): workflow SRS-001
+Menyiapkan proyek Laravel dan database (SRS-001)
+Menambah tampilan Bootstrap dan halaman login (SRS-001)
+Membuat tabel database (SRS-001)
+Membuat model dan aturan jam reservasi (SRS-001)
+Mengatur hak akses per peran dan alamat halaman (SRS-001)
+Membuat tampilan utama, menu, dan halaman beranda (SRS-001)
+Menambah data contoh untuk uji coba (SRS-001)
+Menambah pengujian aturan reservasi dan hak akses (SRS-001)
+Menambah template PR dan folder dokumen (SRS-001)
+Menambah laporan pengerjaan SRS-001
+Mengeluarkan AGENTS.md dan AI-PROMPTS.md dari repo (SRS-001)
+Memperbarui daftar commit di laporan (SRS-001)
 ```
 
 ## 13. Poin Presentasi (± 1 menit)
