@@ -1,58 +1,211 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Reservus
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistem Reservasi & Pelaporan Fasilitas Kampus. Pengguna mengecek ketersediaan fasilitas,
+mengajukan reservasi, dan melaporkan kerusakan. Petugas memproses keduanya, admin mengelola
+akun, fasilitas, dan rekap.
 
-## About Laravel
+Dibangun dengan Laravel 13, MySQL, dan Bootstrap 5.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+> Dokumen lain: alur kerja tim ada di `README-Workflow-Reservus.md`, laporan tiap bagian ada di
+> folder `docs/workflow/`. Konteks untuk AI agent (`AGENTS.md`) dibagikan terpisah oleh PM,
+> tidak ikut di repositori ini.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 1. Yang perlu dipasang lebih dulu
 
-## Learning Laravel
+| Kebutuhan | Versi minimal | Cara cek |
+|---|---|---|
+| PHP | 8.3 | `php -v` |
+| Composer | 2.x | `composer -V` |
+| Node.js + npm | 20 | `node -v` dan `npm -v` |
+| MySQL | 8.x | `mysql --version` |
+| Git | apa saja | `git --version` |
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Windows
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Cara paling gampang: pasang **[Laragon](https://laragon.org/download/)** edisi Full. Di dalamnya
+sudah ada PHP, MySQL, dan Composer sekaligus. Setelah dipasang:
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+1. Buka Laragon, klik **Start All** (Apache/Nginx dan MySQL menyala).
+2. Pastikan PHP-nya 8.3 ke atas: menu **Menu → PHP → Version**. Kalau masih di bawah itu,
+   unduh versi baru lewat **Menu → Tools → Quick add → PHP**.
+3. Node.js dipasang terpisah dari [nodejs.org](https://nodejs.org) (pilih versi LTS).
+4. Semua perintah di panduan ini dijalankan lewat **Terminal bawaan Laragon** (tombol *Terminal*),
+   bukan CMD biasa, supaya `php` dan `composer` langsung dikenali.
 
-## Agentic Development
+Alternatif lain: XAMPP (PHP + MySQL) ditambah Composer dan Node.js yang dipasang sendiri.
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### Linux (Ubuntu / Pop!_OS / Mint)
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+sudo apt update
+sudo apt install -y php8.3-cli php8.3-mysql php8.3-mbstring php8.3-xml php8.3-zip \
+                    php8.3-curl php8.3-intl php8.3-gd unzip git mysql-server
+sudo apt install -y nodejs npm
+curl -sS https://getcomposer.org/installer | php
+sudo mv composer.phar /usr/local/bin/composer
+sudo systemctl enable --now mysql
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Kalau paket `php8.3` belum tersedia di distromu, tambahkan dulu repositori Ondřej:
+`sudo add-apt-repository ppa:ondrej/php && sudo apt update`.
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 2. Menyiapkan proyek (sekali saja)
 
-## Code of Conduct
+Langkah 1–7 sama persis di Windows maupun Linux.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+**1. Ambil kodenya**
 
-## Security Vulnerabilities
+```bash
+git clone https://github.com/PPK-WP/Reservus.git
+cd Reservus
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+**2. Pasang kebutuhan PHP dan JavaScript**
 
-## License
+```bash
+composer install
+npm install
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+**3. Siapkan berkas pengaturan**
+
+Linux / macOS / Terminal Laragon:
+```bash
+cp .env.example .env
+```
+
+Windows (CMD):
+```cmd
+copy .env.example .env
+```
+
+**4. Buat kunci aplikasi**
+
+```bash
+php artisan key:generate
+```
+
+**5. Buat database bernama `reservus`**
+
+Lewat terminal:
+```bash
+mysql -u root -e "CREATE DATABASE reservus CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+```
+
+Di Windows dengan Laragon, cara termudah: klik kanan ikon Laragon → **MySQL → phpMyAdmin**,
+lalu buat database baru bernama `reservus` dengan collation `utf8mb4_unicode_ci`.
+
+Kalau MySQL-mu memakai kata sandi, sesuaikan baris ini di berkas `.env`:
+
+```
+DB_DATABASE=reservus
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+**6. Isi tabel dan data contoh**
+
+```bash
+php artisan migrate:fresh --seed
+php artisan storage:link
+```
+
+**7. Bangun tampilan**
+
+```bash
+npm run build
+```
+
+---
+
+## 3. Menjalankan aplikasi
+
+```bash
+php artisan serve
+```
+
+Buka **http://localhost:8000/login** di browser.
+
+> Halaman depan (`/`) mengarah ke daftar fasilitas yang **belum dikerjakan**, jadi untuk sekarang
+> masih menampilkan 404. Itu normal sampai bagian katalog fasilitas selesai. Mulailah dari `/login`.
+
+Kalau sedang mengubah tampilan dan ingin perubahannya langsung terlihat tanpa build ulang,
+jalankan ini di terminal kedua:
+
+```bash
+npm run dev
+```
+
+### Akun untuk mencoba
+
+Kata sandi semuanya: **`password`**
+
+| Email | Peran | Berguna untuk mencoba |
+|---|---|---|
+| `admin@kampus.test` | Admin | verifikasi akun, kelola user, kelola fasilitas, rekap |
+| `petugas@kampus.test` | Petugas | dashboard petugas, antrean reservasi & laporan |
+| `budi@kampus.test` | Pengguna | pemilik sebagian besar data contoh |
+| `citra@kampus.test` | Pengguna | data milik orang lain, untuk menguji pembatasan akses |
+| `dimas@kampus.test` | Pengguna | pasangan jadwal bentrok |
+| `pending@kampus.test` | Pengguna | akun yang menunggu persetujuan admin |
+| `ditolak@kampus.test` | Pengguna | akun yang ditolak beserta catatannya |
+
+Data contoh juga berisi 8 fasilitas, 15 reservasi, dan 9 laporan yang tanggalnya selalu
+menyesuaikan hari kamu menjalankan `migrate:fresh --seed`.
+
+---
+
+## 4. Perintah yang sering dipakai
+
+| Keperluan | Perintah |
+|---|---|
+| Kembalikan data ke kondisi awal | `php artisan migrate:fresh --seed` |
+| Jalankan aplikasi | `php artisan serve` |
+| Bangun tampilan | `npm run build` |
+| Mode tampilan langsung berubah | `npm run dev` |
+| Jalankan pengujian otomatis | `php artisan test` |
+| Lihat semua alamat halaman | `php artisan route:list` |
+| Bersihkan cache bila ada yang aneh | `php artisan optimize:clear` |
+
+---
+
+## 5. Kalau ada masalah
+
+| Gejala | Penyebab yang paling sering | Cara mengatasi |
+|---|---|---|
+| `SQLSTATE[HY000] [1049] Unknown database 'reservus'` | database belum dibuat | ulangi langkah 5 di bagian penyiapan |
+| `SQLSTATE[HY000] [1045] Access denied for user 'root'` | kata sandi MySQL tidak cocok | sesuaikan `DB_USERNAME` dan `DB_PASSWORD` di `.env` |
+| `could not find driver` | ekstensi MySQL untuk PHP belum aktif | Windows: aktifkan `extension=pdo_mysql` di `php.ini` lalu restart Laragon · Linux: `sudo apt install php8.3-mysql` |
+| Halaman tampil polos tanpa warna | tampilan belum dibangun | `npm run build` |
+| `Vite manifest not found` | sama seperti di atas | `npm run build` |
+| Halaman `/facilities`, `/reservations`, `/reports`, `/admin/facilities` menampilkan 404 | bagian itu memang belum dikerjakan | tunggu sampai bagian terkait selesai dan digabungkan |
+| Perubahan kode tidak terasa | cache lama | `php artisan optimize:clear` |
+| Port 8000 sudah dipakai | ada server lain berjalan | `php artisan serve --port=8001` |
+
+---
+
+## 6. Alur kerja tim secara singkat
+
+```bash
+# mulai bagian baru, selalu dari main terbaru
+git checkout main && git pull origin main
+git checkout -b feature/nama-bagian
+
+# selama bekerja
+git add <berkas>
+git commit -m "Ringkasan singkat pekerjaan (SRS-00X)"
+
+# sebelum membuka PR, ambil perubahan terbaru dan uji ulang
+git fetch origin && git merge origin/main
+php artisan migrate:fresh --seed
+
+git push -u origin feature/nama-bagian   # lalu buka Pull Request ke main di GitHub
+```
+
+Aturan penting: **kerjakan hanya berkas milik bagianmu**. Jangan mengubah migration, model,
+seeder, service, middleware, layout, atau `routes/web.php` — semuanya milik baseline. Kalau
+butuh perubahan di sana, sampaikan ke PM. Rinciannya ada di `README-Workflow-Reservus.md`.
