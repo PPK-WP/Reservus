@@ -18,8 +18,9 @@ Route::redirect('/', '/facilities');
 // Reset password, verifikasi email, dan konfirmasi password dimatikan (D-07).
 Auth::routes(['reset' => false, 'verify' => false, 'confirm' => false]);
 
+// role: menyertakan seluruh peran agar akun non-'aktif' ikut ditolak (aturan bisnis 10).
 Route::get('/home', HomeController::class)
-    ->middleware('auth')
+    ->middleware(['auth', 'role:admin,petugas,pengguna'])
     ->name('home');
 
 Route::get('/petugas', DashboardController::class)
