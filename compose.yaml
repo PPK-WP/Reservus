@@ -1,0 +1,45 @@
+# Menjalankan Reservus tanpa memasang PHP, Composer, Node, atau MySQL di komputer.
+#
+#   docker compose up -d          lalu buka http://localhost:8000
+#
+# Wadah aplikasi sengaja berbagi jaringan dengan wadah database, sehingga alamat
+# 127.0.0.1:3306 di dalamnya menunjuk ke MySQL. Dengan begitu berkas .env yang sama
+# bisa dipakai baik lewat Docker maupun pemasangan biasa, tanpa perlu diubah.
+services:
+  mysql:
+    image: mysql:8.4
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: reservus
+    volumes:
+      - reservus-db:/var/lib/mysql
+    ports:
+      # 8000 = aplikasi (dibuka di sini karena jaringannya dipakai bersama).
+      - "8000:8000"
+      # 3307 = database, bila ingin dilihat lewat DBeaver/phpMyAdmin.
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build: ./docker
+    # Di Linux jalankan dengan: APP_UID=$(id -u) APP_GID=$(id -g) docker compose up -d
+    # agar berkas yang dibuat wadah tetap milik penggunamu. Windows/macOS abaikan saja.
+    user: "${APP_UID:-1000}:${APP_GID:-1000}"
+    working_dir: /app
+    command: php artisan serve --host=0.0.0.0 --port=8000
+    environment:
+      HOME: /tmp
+    volumes:
+      - .:/app
+    network_mode: "service:mysql"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+volumes:
+  reservus-db:

@@ -12,7 +12,88 @@ Dibangun dengan Laravel 13, MySQL, dan Bootstrap 5.
 
 ---
 
-## 1. Yang perlu dipasang lebih dulu
+## 1. Pilih cara menjalankan
+
+Ada dua jalan, pilih salah satu saja:
+
+| Cara | Cocok untuk | Yang perlu dipasang |
+|---|---|---|
+| **Docker** (bagian 2) | ingin cepat jalan, tidak mau ribet memasang banyak hal | Docker saja |
+| **Pasang sendiri** (bagian 3) | sudah punya Laragon/XAMPP, atau ingin lebih ringan | PHP, Composer, Node, MySQL |
+
+Hasil akhirnya sama: aplikasi terbuka di http://localhost:8000.
+
+---
+
+## 2. Cara cepat: pakai Docker (tanpa memasang apa pun)
+
+Kalau di komputermu belum ada PHP, Composer, Node, atau MySQL — dan kamu tidak ingin
+memasangnya satu per satu — pakai cara ini. Yang dibutuhkan hanya **Docker**:
+
+- **Windows:** pasang [Docker Desktop](https://www.docker.com/products/docker-desktop/), lalu jalankan.
+- **Linux:** `sudo apt install docker.io docker-compose-v2` lalu `sudo usermod -aG docker $USER`
+  dan **logout–login** sekali agar berlaku.
+
+Cek dulu Docker sudah siap: `docker compose version`.
+
+### Menyalakan
+
+```bash
+git clone https://github.com/PPK-WP/Reservus.git
+cd Reservus
+cp .env.example .env            # Windows (CMD): copy .env.example .env
+docker compose up -d --build    # pertama kali agak lama, sekitar 3–5 menit
+```
+
+Lalu siapkan isinya — cukup sekali:
+
+```bash
+docker compose exec app composer install
+docker compose exec app npm install
+docker compose exec app php artisan key:generate
+docker compose exec app php artisan migrate:fresh --seed
+docker compose exec app php artisan storage:link
+docker compose exec app npm run build
+```
+
+Buka **http://localhost:8000/login**. Selesai — lompat ke bagian *Akun untuk mencoba*.
+
+> **Khusus Linux:** supaya berkas yang dibuat Docker tetap milik penggunamu (bukan root),
+> jalankan perintah `up` seperti ini:
+> ```bash
+> APP_UID=$(id -u) APP_GID=$(id -g) docker compose up -d --build
+> ```
+> Biar tidak perlu mengetik ulang, simpan saja di berkas `.env` milik Docker:
+> ```bash
+> printf "APP_UID=%s\nAPP_GID=%s\n" "$(id -u)" "$(id -g)" >> .env
+> ```
+
+### Perintah harian versi Docker
+
+Pola umumnya: semua perintah biasa tinggal diberi awalan `docker compose exec app`.
+
+| Keperluan | Perintah |
+|---|---|
+| Nyalakan | `docker compose up -d` |
+| Matikan | `docker compose down` |
+| Lihat catatan jalannya aplikasi | `docker compose logs -f app` |
+| Kembalikan data ke kondisi awal | `docker compose exec app php artisan migrate:fresh --seed` |
+| Bangun tampilan | `docker compose exec app npm run build` |
+| Jalankan pengujian | `docker compose exec app php artisan test` |
+| Masuk ke dalam wadah | `docker compose exec app bash` |
+| Hapus semua termasuk isi database | `docker compose down -v` |
+
+Database juga dibuka di **port 3307** kalau kamu ingin melihat isinya lewat DBeaver atau
+phpMyAdmin: host `127.0.0.1`, port `3307`, pengguna `root`, tanpa kata sandi.
+
+Berkas pengaturannya ada di `compose.yaml` dan `docker/Dockerfile`. Kamu tidak perlu
+mengubahnya, dan jangan diubah tanpa sepengetahuan PM.
+
+---
+
+## 3. Cara biasa: pasang sendiri di komputer
+
+### 3.1 Yang perlu dipasang lebih dulu
 
 | Kebutuhan | Versi minimal | Cara cek |
 |---|---|---|
@@ -53,7 +134,7 @@ Kalau paket `php8.3` belum tersedia di distromu, tambahkan dulu repositori Ondř
 
 ---
 
-## 2. Menyiapkan proyek (sekali saja)
+### 3.2 Menyiapkan proyek (sekali saja)
 
 Langkah 1–7 sama persis di Windows maupun Linux.
 
@@ -122,7 +203,7 @@ npm run build
 
 ---
 
-## 3. Menjalankan aplikasi
+### 3.3 Menjalankan aplikasi
 
 ```bash
 php artisan serve
@@ -159,7 +240,7 @@ menyesuaikan hari kamu menjalankan `migrate:fresh --seed`.
 
 ---
 
-## 4. Perintah yang sering dipakai
+## 4. Perintah yang sering dipakai (tanpa Docker)
 
 | Keperluan | Perintah |
 |---|---|
@@ -184,7 +265,11 @@ menyesuaikan hari kamu menjalankan `migrate:fresh --seed`.
 | `Vite manifest not found` | sama seperti di atas | `npm run build` |
 | Halaman `/facilities`, `/reservations`, `/reports`, `/admin/facilities` menampilkan 404 | bagian itu memang belum dikerjakan | tunggu sampai bagian terkait selesai dan digabungkan |
 | Perubahan kode tidak terasa | cache lama | `php artisan optimize:clear` |
-| Port 8000 sudah dipakai | ada server lain berjalan | `php artisan serve --port=8001` |
+| Port 8000 sudah dipakai | ada server lain berjalan | `php artisan serve --port=8001`, atau matikan Docker-nya dengan `docker compose down` |
+| Docker: `permission denied` saat menulis berkas (Linux) | wadah berjalan sebagai pengguna lain | jalankan ulang dengan `APP_UID=$(id -u) APP_GID=$(id -g) docker compose up -d` |
+| Docker: `port is already allocated` | port 8000 atau 3307 sudah dipakai program lain | matikan program itu, atau ubah nomor port di `compose.yaml` |
+| Docker: aplikasi mati sendiri setelah dinyalakan | database belum siap atau `.env` belum ada | cek `docker compose logs app`, pastikan `.env` sudah disalin dari `.env.example` |
+| Docker: `Cannot connect to the Docker daemon` | Docker belum berjalan | Windows: buka Docker Desktop · Linux: `sudo systemctl start docker` |
 
 ---
 
