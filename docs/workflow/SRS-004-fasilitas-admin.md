@@ -34,7 +34,7 @@ Sumber: `git diff --name-status origin/main...HEAD`
 
 | Status | File | Keterangan |
 |---|---|---|
-| M | `composer.json` | Tambah `barryvdh/laravel-dompdf ^3.1` & `openspout/openspout 5.11` (paket ekspor, sesuai G4) |
+| M | `composer.json` | `"php": "^8.4"` + `config.platform.php = "8.4.0"` (D-11), `openspout/openspout ^5.11` (disesuaikan v5), `barryvdh/laravel-dompdf ^3.1` |
 | M | `composer.lock` | Hasil require paket ekspor |
 | A | `config/dompdf.php` | Diterbitkan lewat `vendor:publish` (milik SRS-004, "bila dipublish") |
 | M | `routes/fasilitas-admin.php` | 8 route SRS-004 dalam group `auth+role:admin`, prefix `admin`, name `admin.` |
@@ -170,6 +170,7 @@ Hasil `php artisan test`: **27 passed, 92 assertions** (baseline, tetap hijau).
 | Uji HTTP SRS-004: skenario report "error_box=False" & toggle tidak berubah | (1) error flash habis di request pertama (redirect-follow); (2) salah asumsi ID fasilitas: Lapangan Basket itu **id 7**, bukan 6 | Uji tombol error langsung dari respons setelah redirect (`Isi`); identifikasi ID fasilitas dari seeder sebelum uji |
 | `tinker --execute` gagal/parsing berantakan di PowerShell | PS 5.1 quoting argumen PHP; apostrof `'` di XML & CSV | Tulis script PHP kecil temp (bootstrap app) untuk operasi DB; pola regex disesuaikan dengan XML entity `&#039;` |
 | PS 5.1 `Invoke-WebRequest` | (1) mode NonInteractive perlu `-UseBasicParsing`; (2) `-MaximumRedirection 0` membuat `Response` jadi null | `$PSDefaultParameterValues['Invoke-WebRequest:UseBasicParsing']` global + ikuti redirect dan baca `ResponseUri` akhir |
+| **D-11 (AGENTS2)**: `platform.php = "8.4.0"` vs symfony `>=8.4.1` | symfony 8.1.x (Laravel 13) menuntut PHP patch `8.4.1`, platform 8.4.0 menolaknya | Terapkan D-11 literal (keputusan user): composer me-resolve symfony 8.1 → **7.4** dan `laravel/framework` → 13.33 sehingga lock tetap ter-install di PHP 8.4.0; baseline + smoketest ekspor tetap LULUS |
 
 ## 11. HANDOFF UNTUK PM
 
@@ -177,6 +178,8 @@ Hasil `php artisan test`: **27 passed, 92 assertions** (baseline, tetap hijau).
 |---|---|---|---|---|
 | `config/excel.php` tidak dibuat | `composer.json` | `maatwebsite/excel` tidak dipakai (kendala ext-gd) | Tidak ada pengaruh: rekap XLSX memakai openspout | Selesai |
 | Fitur SRS-003 tidak bisa diuji bersama di branch ini | `routes/fasilitas-katalog.php` | Branch SRS-004 dibuat dari `main` sebelum SRS-003 di-merge | Baru terlihat setelah SRS-003 di-merge; skenario "nonaktif tidak tampil di katalog" diverifikasi silang setelah merge | Menunggu |
+| **Kepatuhan D-11 menurunkan symfony 8.1 → 7.4** (lock) | `composer.json`, `composer.lock` | D-11 menetapkan `platform.php = "8.4.0"`, sedangkan symfony 8.1.x menuntut `php >=8.4.1`; composer me-resolve ke symfony 7.4 agar lock bisa di-install di PHP 8.4.0, dan `laravel/framework` naik 13.17 → 13.33 | Perubahan lock ini berdampak lintas-SRS; semua anggota disarankan `composer install` ulang dan `migrate:fresh --seed` sebelum verifikasi fitur mereka | Perlu uji ulang oleh anggota lain |
+| **`openspout ^5.11` ter-resolve ke 5.11.3** | `composer.json` | Constraint resmi v5 (`^5.11`) agar tetap pada mayor v5 | API v5 (`Writer`/`openToFile`/`Row::fromValues`) sama untuk 5.11.0 s.d. 5.11.3; dipastikan via smoketest ekspor | Selesai |
 
 ## 12. Riwayat Commit
 
@@ -189,6 +192,8 @@ b245364 feat(fasilitas): Admin\FacilityController CRUD & toggle status (SRS-004,
 3b4a405 feat(fasilitas): rekap okupansi & laporan + ekspor CSV/XLSX/PDF (SRS-004, US-17)
 06364ba feat(fasilitas): tampilan master fasilitas & rekap admin (SRS-004, US-16/17)
 <hash> docs(fasilitas): workflow SRS-004
+<hash> chore(fasilitas): sesuaikan composer.json ke D-11 (php ^8.4 & platform 8.4.0) + openspout ^5.11 (SRS-004)
+<hash> docs(fasilitas): catat kepatuhan D-11 & efek symfony di workflow SRS-004
 ```
 
 ## 13. Poin Presentasi (± 1 menit)
