@@ -11,7 +11,7 @@
 | Kelompok | `[isi nomor kelompok]` |
 | Anggota | PM (hybrid): `[nama – NIM]` · Programmer 1: `[nama – NIM]` · Programmer 2: `[nama – NIM]` · Programmer 3: `[nama – NIM]` |
 | Proyek | Reservus — reservasi & pelaporan fasilitas kampus (17 user story, 4 aktor) |
-| Stack | Laravel 13 · PHP ≥ 8.3 · MySQL Server 9.5 · Blade · `laravel/ui` (Bootstrap 5 via Vite) · Git/GitHub |
+| Stack | Laravel 13 · PHP 8.5 (minimal 8.4, D-11) · MySQL Server 9.5 · Blade · `laravel/ui` (Bootstrap 5 via Vite) · Git/GitHub |
 | Tahapan | Baseline (PM) → Gelombang 1 → Gelombang 2 → **Demo internal H-7: 17/17 US** → Polish & dokumen → Pengumpulan via Kulon → Presentasi UTS |
 | Agentic AI | Claude Code · Antigravity · OpenCode · Hermes — kontrak bersama di **satu file: `AGENTS.md`** (D-10) |
 | Referensi UX | Skedda & Robin (grid ketersediaan) · Calendly & Google Calendar (pemilihan slot 30 menit) · Booking.com (pencarian, filter, badge status) |
@@ -759,7 +759,7 @@ patokan adalah **Fase 4 (H-7)** yang jatuh tujuh hari sebelum batas pengumpulan.
 
 | Fase | Aktivitas | PIC | Selesai jika |
 |---|---|---|---|
-| 0 · Persiapan | Semua: siapkan env (PHP 8.3 + ekstensi, Composer, Node, MySQL 9.5), akun GitHub, `git config`. PM: konfirmasi D-02 ke dosen | semua | semua anggota bisa `php -v`, `composer -V`, `mysql` |
+| 0 · Persiapan | Semua: siapkan env (PHP 8.5 + ekstensi, Composer, Node 22, MySQL 9.5 — atau cukup Docker), akun GitHub, `git config`. PM: konfirmasi D-02 ke dosen | semua | semua anggota bisa `php -v`, `composer -V`, `mysql` |
 | 1 · Baseline | **SRS-001** → push `main` (anggota lain: pelajari US & kontrak, siapkan prompt, sketsa UI) | PM | acceptance §9.1 lulus |
 | 2 · Gelombang 1 | Paralel: 002 (PM) · 003 (P1) · 005 (P2) · 007 (P3) + rolling merge | semua | 4 PR ter-merge |
 | 3 · Gelombang 2 | Paralel: 004 (P1) · 006 (P2) · 008 (P3) · PM integrasi + audit keamanan (§12). Boleh dimulai bersamaan dengan Fase 2 | semua | 3 PR ter-merge + audit selesai |
@@ -873,8 +873,9 @@ tanpa konflik?".
 ## 16. Cara Menjalankan Aplikasi
 
 ### 16.1 Prasyarat
-PHP ≥ 8.3 dengan ekstensi `pdo_mysql`, `mbstring`, `fileinfo`, `gd`, `zip` (`gd` & `zip` dibutuhkan
-ekspor Excel/PDF) · Composer 2 · Node ≥ 20 · MySQL Server 9.5 · Git.
+PHP 8.5 (minimal 8.4) dengan ekstensi `pdo_mysql`, `mbstring`, `fileinfo`, `gd`, `zip` (`gd` & `zip` dibutuhkan
+ekspor Excel/PDF) · Composer 2 · Node 22 (minimal 20.19) · MySQL Server 9.5 · Git.
+Atau cukup Docker: `docker compose up -d` (wadah berisi PHP 8.5, Composer, Node 22, MySQL).
 
 ### 16.2 Langkah
 ```bash
@@ -907,7 +908,7 @@ DB_PASSWORD=
 | Gejala | Penyebab & solusi |
 |---|---|
 | `Unknown database 'reservus'` | buat database dulu (§16.2) |
-| `authentication method unknown` | PHP ≥ 8.3 dengan `mysqlnd`; MySQL 9.x hanya memakai `caching_sha2_password` |
+| `authentication method unknown` | PHP 8.5 dengan `mysqlnd`; MySQL 9.x hanya memakai `caching_sha2_password` |
 | `could not find driver` | aktifkan `pdo_mysql` di `php.ini` |
 | `View [...] not found` | view harus berada di `/views` (D-02); jalankan `php artisan view:clear` |
 | `Call to undefined method ...::middleware()` | stub controller `laravel/ui` pada Laravel 11+ — ikuti perbaikan di prompt baseline |
