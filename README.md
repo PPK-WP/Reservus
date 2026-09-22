@@ -27,6 +27,8 @@ Hasil akhirnya sama: aplikasi terbuka di http://localhost:8000.
 
 ## 2. Cara cepat: pakai Docker (tanpa memasang apa pun)
 
+Wadah Docker proyek sudah berisi **PHP 8.5**, Composer, dan Node 22.
+
 Kalau di komputermu belum ada PHP, Composer, Node, atau MySQL — dan kamu tidak ingin
 memasangnya satu per satu — pakai cara ini. Yang dibutuhkan hanya **Docker**:
 
@@ -97,9 +99,9 @@ mengubahnya, dan jangan diubah tanpa sepengetahuan PM.
 
 | Kebutuhan | Versi minimal | Cara cek |
 |---|---|---|
-| PHP | 8.3 | `php -v` |
+| PHP | **8.5** (minimal 8.4) | `php -v` |
 | Composer | 2.x | `composer -V` |
-| Node.js + npm | 20 | `node -v` dan `npm -v` |
+| Node.js + npm | **22** (minimal 20.19) | `node -v` dan `npm -v` |
 | MySQL | 8.x | `mysql --version` |
 | Git | apa saja | `git --version` |
 
@@ -109,28 +111,36 @@ Cara paling gampang: pasang **[Laragon](https://laragon.org/download/)** edisi F
 sudah ada PHP, MySQL, dan Composer sekaligus. Setelah dipasang:
 
 1. Buka Laragon, klik **Start All** (Apache/Nginx dan MySQL menyala).
-2. Pastikan PHP-nya 8.3 ke atas: menu **Menu → PHP → Version**. Kalau masih di bawah itu,
-   unduh versi baru lewat **Menu → Tools → Quick add → PHP**.
-3. Node.js dipasang terpisah dari [nodejs.org](https://nodejs.org) (pilih versi LTS).
+2. Pasang PHP 8.5: unduh berkas zip **PHP 8.5 VS17 x64 Thread Safe** dari
+   [windows.php.net/download](https://windows.php.net/download/), ekstrak ke folder
+   `C:\laragon\bin\php\`, lalu pilih lewat **Menu → PHP → Version**.
+   Setelah itu aktifkan ekstensi lewat **Menu → PHP → Extensions**: `gd`, `intl`, `zip`, `pdo_mysql`.
+3. Node.js dipasang terpisah dari [nodejs.org](https://nodejs.org) — pilih versi **22 LTS**.
 4. Semua perintah di panduan ini dijalankan lewat **Terminal bawaan Laragon** (tombol *Terminal*),
    bukan CMD biasa, supaya `php` dan `composer` langsung dikenali.
 
-Alternatif lain: XAMPP (PHP + MySQL) ditambah Composer dan Node.js yang dipasang sendiri.
+Alternatif tanpa Laragon: PHP 8.5 zip dari windows.php.net + [Composer-Setup.exe](https://getcomposer.org/download/)
++ MySQL Installer + Node.js 22. XAMPP **tidak disarankan** karena umumnya membawa PHP versi lama.
 
 ### Linux (Ubuntu / Pop!_OS / Mint)
 
 ```bash
+# PHP 8.5 belum ada di repositori bawaan Ubuntu 24.04, jadi pakai PPA Ondřej
+sudo add-apt-repository -y ppa:ondrej/php
 sudo apt update
-sudo apt install -y php8.3-cli php8.3-mysql php8.3-mbstring php8.3-xml php8.3-zip \
-                    php8.3-curl php8.3-intl php8.3-gd unzip git mysql-server
-sudo apt install -y nodejs npm
+sudo apt install -y php8.5-cli php8.5-mysql php8.5-mbstring php8.5-xml php8.5-zip \
+                    php8.5-curl php8.5-intl php8.5-gd php8.5-bcmath unzip git mysql-server
+
+# Node.js 22 — JANGAN "apt install nodejs": versi bawaan Ubuntu 18.x terlalu lama untuk Vite
+curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+sudo apt install -y nodejs
+
 curl -sS https://getcomposer.org/installer | php
 sudo mv composer.phar /usr/local/bin/composer
 sudo systemctl enable --now mysql
 ```
 
-Kalau paket `php8.3` belum tersedia di distromu, tambahkan dulu repositori Ondřej:
-`sudo add-apt-repository ppa:ondrej/php && sudo apt update`.
+Cek hasilnya: `php -v` harus menunjukkan **8.5.x** dan `node -v` harus **v22.x**.
 
 ---
 
@@ -260,7 +270,7 @@ menyesuaikan hari kamu menjalankan `migrate:fresh --seed`.
 |---|---|---|
 | `SQLSTATE[HY000] [1049] Unknown database 'reservus'` | database belum dibuat | ulangi langkah 5 di bagian penyiapan |
 | `SQLSTATE[HY000] [1045] Access denied for user 'root'` | kata sandi MySQL tidak cocok | sesuaikan `DB_USERNAME` dan `DB_PASSWORD` di `.env` |
-| `could not find driver` | ekstensi MySQL untuk PHP belum aktif | Windows: aktifkan `extension=pdo_mysql` di `php.ini` lalu restart Laragon · Linux: `sudo apt install php8.3-mysql` |
+| `could not find driver` | ekstensi MySQL untuk PHP belum aktif | Windows: aktifkan `extension=pdo_mysql` di `php.ini` lalu restart Laragon · Linux: `sudo apt install php8.5-mysql` |
 | Halaman tampil polos tanpa warna | tampilan belum dibangun | `npm run build` |
 | `Vite manifest not found` | sama seperti di atas | `npm run build` |
 | Halaman `/facilities`, `/reservations`, `/reports`, `/admin/facilities` menampilkan 404 | bagian itu memang belum dikerjakan | tunggu sampai bagian terkait selesai dan digabungkan |

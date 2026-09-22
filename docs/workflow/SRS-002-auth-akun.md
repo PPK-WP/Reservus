@@ -7,7 +7,7 @@
 | Branch | `feature/auth-akun` |
 | User Story | US-13 (registrasi mandiri), US-14 (admin membuat akun), US-15 (verifikasi admin) |
 | Agent AI yang dipakai | Claude Code (Opus 5) |
-| Status | 🔵 Siap dibuka PR ke `main` |
+| Status | 🟢 Merged ke `main` |
 | Periode | 2026-09-20 – 2026-09-20 |
 | Pull Request | `<link PR>` |
 
@@ -142,6 +142,8 @@ Perintah persiapan: `php artisan migrate:fresh --seed && php artisan serve`
 | 9 | Proses ulang akun yang sudah diputuskan | setujui akun yang sudah ditolak | ditolak dengan pesan | "sudah diproses sebelumnya"; status di database tidak berubah | ✅ |
 
 Hasil `php artisan test`: **27 passed (92 assertions)** — seluruh pengujian baseline tetap hijau setelah perubahan SRS-002.
+
+*Pembaruan 2026-09-22:* diulang di PHP 8.5.10 (wadah Docker proyek) — 27 passed, tanpa peringatan *deprecated* pada kode SRS-002.
 
 ## 9. Screenshot
 
