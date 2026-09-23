@@ -191,13 +191,14 @@ Hasil `php artisan test`: **27 passed (92 assertions), 0 failed**.
 | `php artisan storage:link` membuat symlink absolut ke path lingkungan build | Perintah memakai path absolut | Symlink dibuat ulang relatif: `public/storage -> ../storage/app/public` |
 | Laptop kerja PM tidak memiliki PHP/Composer/Node/MySQL natively | Lingkungan kerja | Toolchain dijalankan lewat Docker (image PHP 8.4 + `pdo_mysql` + Composer, `node:22`, `mysql:8.4` pada `127.0.0.1:3306` dengan database `reservus`). Isi repositori tetap proyek Laravel standar sehingga anggota lain cukup memakai PHP/MySQL lokal (XAMPP/Laragon) |
 | `tests/Feature/ExampleTest` gagal setelah `/` di-redirect | `/` kini mengarah ke `/facilities` | Diganti `BaselineAccessTest` yang menguji gerbang akses baseline |
+| *Pembaruan 2026-09-22:* tim diseragamkan ke PHP 8.5 | SRS-004 memakai openspout v5 (butuh PHP 8.4+); P1 & P2 memakai PHP 8.5 | Wadah Docker proyek dinaikkan ke `php:8.5-cli` (`compose.yaml` + `docker/Dockerfile`); keputusan D-11 menetapkan minimal 8.4. Seluruh uji baseline diulang di PHP 8.5.10: 27 passed, tanpa peringatan *deprecated* |
 
 ## 11. HANDOFF UNTUK PM
 
 | Kebutuhan | File terkait | Alasan | Dampak bila tidak ada | Status |
 |---|---|---|---|---|
-| Gating login untuk status `pending`/`ditolak` **di form login** (beserta catatan penolakan) | `app/Http/Controllers/Auth/LoginController.php` | Termasuk scope SRS-002 (US 13–15) | Baseline sudah menutup celah lewat `CheckRole` pada `/home`, tetapi pesan di halaman login belum spesifik | Menunggu SRS-002 |
-| Form registrasi lengkap (jenis pengguna, NIM/NIP, `status=pending`, tanpa login otomatis) | `views/auth/register.blade.php`, `RegisterController` | Scope SRS-002 | Registrasi saat ini masih bawaan `laravel/ui` (akun langsung `aktif` via default kolom) | Menunggu SRS-002 |
+| Gating login untuk status `pending`/`ditolak` **di form login** (beserta catatan penolakan) | `app/Http/Controllers/Auth/LoginController.php` | Termasuk scope SRS-002 (US 13–15) | Baseline sudah menutup celah lewat `CheckRole` pada `/home`, tetapi pesan di halaman login belum spesifik | ✅ Selesai di SRS-002 |
+| Form registrasi lengkap (jenis pengguna, NIM/NIP, `status=pending`, tanpa login otomatis) | `views/auth/register.blade.php`, `RegisterController` | Scope SRS-002 | Registrasi saat ini masih bawaan `laravel/ui` (akun langsung `aktif` via default kolom) | ✅ Selesai di SRS-002 |
 | Halaman `/facilities`, `/reservations`, `/reports`, `/admin/*` | file route & controller masing-masing SRS | Sesuai pembagian | Tautan navbar masih 404 sampai SRS terkait di-merge | Menunggu SRS-003…008 |
 | Partial `petugas.partials.reservation-queue` & `report-queue` | SRS-006 & SRS-008 | Kontrak E4 | Dashboard petugas menampilkan "Modul belum terpasang." | Menunggu SRS-006/008 |
 

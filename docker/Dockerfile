@@ -1,5 +1,5 @@
-# Lingkungan pengembangan Reservus: PHP 8.4 + Composer + Node.js.
-FROM php:8.4-cli
+# Lingkungan pengembangan Reservus: PHP 8.5 + Composer + Node.js.
+FROM php:8.5-cli
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         git unzip libzip-dev libicu-dev libonig-dev libpng-dev ca-certificates curl gnupg \
