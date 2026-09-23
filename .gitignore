@@ -29,3 +29,6 @@ Thumbs.db
 # Konteks agent & prompt internal tim (tidak ikut repositori)
 /AGENTS.md
 /AI-PROMPTS.md
+
+# Ringkasan alur per SRS (catatan internal PM, tidak ikut repositori)
+/alur-SRS-*.md
