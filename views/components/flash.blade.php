@@ -20,7 +20,7 @@
     </div>
 @endif
 
-@if ($errors->any())
+@if (isset($errors) && $errors->any())
     <div class="alert alert-danger" role="alert">
         <strong>Periksa kembali isian Anda:</strong>
         <ul class="mb-0 mt-2">

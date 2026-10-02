@@ -28,4 +28,5 @@ Thumbs.db
 
 # Konteks agent & prompt internal tim (tidak ikut repositori)
 /AGENTS.md
-/AI-PROMPTS.md
+/AGENTS2.md
+/AI-PROMPT*.md
