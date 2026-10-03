@@ -59,7 +59,7 @@
                     <tbody>
                         @foreach ($reports as $report)
                             <tr>
-                                <td>{{ $report->id }}</td>
+                                <td>{{ $reports->total() - ($reports->firstItem() + $loop->index) + 1 }}</td>
                                 <td>{{ $report->user->name }}</td>
                                 <td>{{ $report->facility->name }}</td>
                                 <td>
