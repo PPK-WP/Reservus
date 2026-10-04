@@ -1,7 +1,37 @@
-// Body
-$body-bg: #f8fafc;
+// Identitas Undip (DESIGN.md §2, §4.1)
+// Lambang resmi Undip tidak memuat warna biru, jadi kobalt tetap memakai aproksimasi
+// biru kobalt jas almamater sesuai Statuta (PP 52/2015).
+$undip-kobalt: #0047AB;
+$undip-kobalt-tua: #00337A;
+$undip-kobalt-muda: #E8EFF9;
+$fsm-silver: #A9B1BB;
+$tinta: #1F2A37;
+$latar: #F4F6F9;
 
-// Typography
-$font-family-sans-serif: 'Nunito', sans-serif;
-$font-size-base: 0.9rem;
+// Pemetaan ke Bootstrap
+$primary: $undip-kobalt;
+$secondary: #5B6573;
+$body-bg: $latar;
+$body-color: $tinta;
+$border-color: #D9DEE5;
+$link-color: $undip-kobalt;
+$link-hover-color: $undip-kobalt-tua;
+
+// Tipografi (DESIGN.md §3)
+$font-family-sans-serif: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+$font-size-base: 0.9375rem;
 $line-height-base: 1.6;
+$headings-font-weight: 700;
+$h3-font-size: 1.5rem;
+$form-label-font-size: 0.875rem;
+$form-label-font-weight: 500;
+
+// Isian form tetap putih: Bootstrap 5.3 mengambil latar input dari $body-bg (sekarang abu-abu)
+$input-bg: #fff;
+
+// Bentuk
+$border-radius: .5rem;
+$border-radius-lg: .75rem;
+$card-border-color: $border-color;
+$card-box-shadow: none;
+$btn-font-weight: 600;
