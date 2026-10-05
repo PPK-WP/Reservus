@@ -1,126 +1,137 @@
 @extends('layouts.app')
 
-@section('title', 'Buat Akun — '.config('app.name'))
+@section('title', 'Buat Akun | '.config('app.name'))
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white fw-semibold">Buat Akun Baru</div>
+    <div class="mb-4">
+        <a href="/admin/users" class="d-inline-flex align-items-center gap-2 small text-decoration-none mb-3">
+            <span aria-hidden="true">&larr;</span>
+            <span>Kembali ke kelola user</span>
+        </a>
+        <h1 class="h3 mb-1">Buat Akun Baru</h1>
+        <p class="text-secondary mb-0">Tambahkan akun petugas atau pengguna yang langsung aktif.</p>
+    </div>
 
-                <div class="card-body">
-                    <p class="text-muted small">
-                        Akun yang dibuat di sini langsung berstatus aktif dan bisa segera masuk.
-                        Pembuatan akun petugas hanya bisa dilakukan lewat halaman ini.
-                    </p>
+    <div class="row g-4 align-items-start">
+        <div class="col-lg-8">
+            <form method="POST" action="/admin/users" id="form-buat-akun" class="card" novalidate>
+                @csrf
 
-                    <form method="POST" action="/admin/users" id="form-buat-akun" novalidate>
-                        @csrf
-
-                        <div class="row mb-3">
-                            <label for="name" class="col-md-4 col-form-label text-md-end">Nama Lengkap</label>
-                            <div class="col-md-6">
-                                <input id="name" type="text" name="name" value="{{ old('name') }}"
-                                       class="form-control @error('name') is-invalid @enderror"
-                                       required maxlength="255" autofocus>
-                                @error('name')
-                                    <span class="invalid-feedback" role="alert">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">Alamat Email</label>
-                            <div class="col-md-6">
-                                <input id="email" type="email" name="email" value="{{ old('email') }}"
-                                       class="form-control @error('email') is-invalid @enderror"
-                                       required maxlength="255">
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="role" class="col-md-4 col-form-label text-md-end">Peran</label>
-                            <div class="col-md-6">
-                                <select id="role" name="role"
-                                        class="form-select @error('role') is-invalid @enderror" required>
-                                    <option value="">— Pilih peran —</option>
-                                    @foreach ($peranPilihan as $nilai => $label)
-                                        <option value="{{ $nilai }}" @selected(old('role') === $nilai)>{{ $label }}</option>
-                                    @endforeach
-                                </select>
-                                <div class="form-text">Peran admin tidak dapat dibuat dari halaman ini.</div>
-                                @error('role')
-                                    <span class="invalid-feedback" role="alert">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3" id="baris-jenis">
-                            <label for="user_type" class="col-md-4 col-form-label text-md-end">Jenis Pengguna</label>
-                            <div class="col-md-6">
-                                <select id="user_type" name="user_type"
-                                        class="form-select @error('user_type') is-invalid @enderror">
-                                    <option value="">— Pilih jenis pengguna —</option>
-                                    @foreach (\App\Models\User::USER_TYPES as $nilai => $label)
-                                        <option value="{{ $nilai }}" @selected(old('user_type') === $nilai)>{{ $label }}</option>
-                                    @endforeach
-                                </select>
-                                <div class="form-text">Wajib diisi bila perannya pengguna.</div>
-                                @error('user_type')
-                                    <span class="invalid-feedback" role="alert">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="identity_number" class="col-md-4 col-form-label text-md-end">
-                                NIM / NIP <span class="text-muted fw-normal">(opsional)</span>
-                            </label>
-                            <div class="col-md-6">
-                                <input id="identity_number" type="text" name="identity_number"
-                                       value="{{ old('identity_number') }}"
-                                       class="form-control @error('identity_number') is-invalid @enderror"
-                                       maxlength="30">
-                                @error('identity_number')
-                                    <span class="invalid-feedback" role="alert">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="password" class="col-md-4 col-form-label text-md-end">Kata Sandi</label>
-                            <div class="col-md-6">
-                                <input id="password" type="password" name="password"
-                                       class="form-control @error('password') is-invalid @enderror"
-                                       required minlength="8" autocomplete="new-password">
-                                <div class="form-text">Minimal 8 karakter.</div>
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="password-confirm" class="col-md-4 col-form-label text-md-end">Ulangi Kata Sandi</label>
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" name="password_confirmation"
-                                       class="form-control" required minlength="8" autocomplete="new-password">
-                            </div>
-                        </div>
-
-                        <div class="row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">Simpan Akun</button>
-                                <a href="/admin/users" class="btn btn-outline-secondary">Batal</a>
-                            </div>
-                        </div>
-                    </form>
+                <div class="card-header bg-white py-3">
+                    <h2 class="h6 mb-1">Informasi akun</h2>
+                    <p class="small text-secondary mb-0">Kolom bertanda wajib harus diisi.</p>
                 </div>
-            </div>
+
+                <div class="card-body p-3 p-md-4">
+                    <div class="mb-3">
+                        <label for="name" class="form-label fw-medium">Nama lengkap</label>
+                        <input id="name" type="text" name="name" value="{{ old('name') }}"
+                               class="form-control @error('name') is-invalid @enderror"
+                               required maxlength="255" autocomplete="name" autofocus>
+                        @error('name')
+                            <div class="invalid-feedback" role="alert">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label fw-medium">Alamat email</label>
+                        <input id="email" type="email" name="email" value="{{ old('email') }}"
+                               class="form-control @error('email') is-invalid @enderror"
+                               required maxlength="255" autocomplete="email">
+                        @error('email')
+                            <div class="invalid-feedback" role="alert">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="role" class="form-label fw-medium">Peran</label>
+                        <select id="role" name="role"
+                                class="form-select @error('role') is-invalid @enderror"
+                                aria-describedby="role-help" required>
+                            <option value="">Pilih peran</option>
+                            @foreach ($peranPilihan as $nilai => $label)
+                                <option value="{{ $nilai }}" @selected(old('role') === $nilai)>{{ $label }}</option>
+                            @endforeach
+                        </select>
+                        <div id="role-help" class="form-text">Peran admin tidak dapat dibuat dari halaman ini.</div>
+                        @error('role')
+                            <div class="invalid-feedback" role="alert">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3" id="baris-jenis">
+                        <label for="user_type" class="form-label fw-medium">Jenis pengguna</label>
+                        <select id="user_type" name="user_type"
+                                class="form-select @error('user_type') is-invalid @enderror"
+                                aria-describedby="user-type-help">
+                            <option value="">Pilih jenis pengguna</option>
+                            @foreach (\App\Models\User::USER_TYPES as $nilai => $label)
+                                <option value="{{ $nilai }}" @selected(old('user_type') === $nilai)>{{ $label }}</option>
+                            @endforeach
+                        </select>
+                        <div id="user-type-help" class="form-text">Wajib diisi bila perannya pengguna.</div>
+                        @error('user_type')
+                            <div class="invalid-feedback" role="alert">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="identity_number" class="form-label fw-medium">
+                            NIM / NIP <span class="text-secondary fw-normal">(opsional)</span>
+                        </label>
+                        <input id="identity_number" type="text" name="identity_number"
+                               value="{{ old('identity_number') }}"
+                               class="form-control @error('identity_number') is-invalid @enderror"
+                               maxlength="30">
+                        @error('identity_number')
+                            <div class="invalid-feedback" role="alert">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="password" class="form-label fw-medium">Kata sandi</label>
+                            <input id="password" type="password" name="password"
+                                   class="form-control @error('password') is-invalid @enderror"
+                                   required minlength="8" autocomplete="new-password"
+                                   aria-describedby="password-help">
+                            <div id="password-help" class="form-text">Minimal 8 karakter.</div>
+                            @error('password')
+                                <div class="invalid-feedback" role="alert">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="password-confirm" class="form-label fw-medium">Ulangi kata sandi</label>
+                            <input id="password-confirm" type="password" name="password_confirmation"
+                                   class="form-control" required minlength="8" autocomplete="new-password">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-white d-flex flex-column-reverse flex-sm-row justify-content-end align-items-stretch align-items-sm-center gap-2 py-3">
+                    <a href="/admin/users" class="btn btn-link text-decoration-none">Batal</a>
+                    <button type="submit" class="btn btn-primary">Simpan akun</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-lg-4">
+            <aside class="card" aria-labelledby="info-akun-baru">
+                <div class="card-body p-3 p-md-4">
+                    <span class="ikon-kotak mb-3" aria-hidden="true">
+                        <x-ikon nama="shield-lock" ukuran="1.35rem" />
+                    </span>
+                    <h2 id="info-akun-baru" class="h6 mb-3">Akses akun baru</h2>
+                    <ul class="small text-secondary ps-3 mb-0 vstack gap-2">
+                        <li>Akun langsung berstatus aktif setelah disimpan.</li>
+                        <li>Akun petugas hanya dapat dibuat oleh admin.</li>
+                        <li>Jenis pengguna hanya diperlukan untuk peran pengguna.</li>
+                        <li>Peran admin tidak tersedia pada formulir ini.</li>
+                    </ul>
+                </div>
+            </aside>
         </div>
     </div>
 </div>
