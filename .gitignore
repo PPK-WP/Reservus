@@ -35,3 +35,4 @@ Thumbs.db
 # Ringkasan alur per SRS (catatan internal PM, tidak ikut repositori)
 /alur-SRS-*.md
 /alur-SRS-*.pdf
+/DESIGN.md

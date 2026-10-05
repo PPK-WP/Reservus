@@ -1,8 +1,89 @@
-// Fonts
-@import url('https://fonts.bunny.net/css?family=Nunito');
+// Fonts (DESIGN.md §3)
+@import url('https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700&display=swap');
 
 // Variables
 @import 'variables';
 
 // Bootstrap
 @import 'bootstrap/scss/bootstrap';
+
+// ---------------------------------------------------------------------------
+// Pola bersama (DESIGN.md §4.2) — boleh dipakai semua anggota
+// ---------------------------------------------------------------------------
+
+// Pita kobalt di atas navbar — satu-satunya "tanda tangan" visual aplikasi
+.navbar-undip { border-top: 4px solid $undip-kobalt; }
+
+// Kartu: garis tipis, tanpa bayangan abu-abu seragam
+.card { border-color: $border-color; }
+.card.card-interaktif { transition: border-color .15s ease-in-out; }
+.card.card-interaktif:hover,
+.card.card-interaktif:focus-within { border-color: $undip-kobalt; }
+
+// Baris tabel yang sedang dibuka / dipilih
+.table-row-aktif > * { background-color: $undip-kobalt-muda !important; }
+
+// Teks tabel 0.875rem (DESIGN.md §3)
+.table { font-size: .875rem; }
+
+// Fokus keyboard yang jelas
+:focus-visible { outline: 3px solid rgba($undip-kobalt, .45); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+}
+
+// ---------------------------------------------------------------------------
+// Pelengkap halaman PM (layout, beranda, login/register)
+// ---------------------------------------------------------------------------
+
+// Menu navbar yang sedang dibuka (DESIGN.md §6.1)
+.navbar-undip .nav-link.active { color: $undip-kobalt; font-weight: 600; }
+
+// Judul halaman login/register memakai kobalt tua (DESIGN.md §2)
+.text-kobalt-tua { color: $undip-kobalt-tua; }
+
+// Latar info ringan kobalt muda (DESIGN.md §2)
+.bg-kobalt-muda { background-color: $undip-kobalt-muda; }
+
+// Paragraf panjang maksimal ±75 karakter (DESIGN.md §3)
+.teks-ringkas { max-width: 65ch; }
+
+// Anak flex yang boleh menyusut, agar .text-truncate di dalamnya bekerja
+.min-w-0 { min-width: 0; }
+
+// Kotak ikon fungsional pada kartu pintasan & ringkasan
+.ikon-kotak {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: $border-radius;
+    background-color: $undip-kobalt-muda;
+    color: $undip-kobalt;
+}
+
+// Angka ringkasan di beranda & dashboard
+.angka-ringkasan {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+}
+
+// Di HP tiga kartu angka berjejer: perkecil agar kata tidak terpotong di tengah
+@include media-breakpoint-down(sm) {
+    .kartu-angka .card-body { padding: .75rem; }
+    .kartu-angka .angka-ringkasan { font-size: 1.5rem; }
+    .kartu-angka .label-angka { font-size: .8125rem; }
+}
+
+// Login & register: dua kolom di ≥ lg (DESIGN.md §6.2)
+.auth-kartu { max-width: 1040px; }
+.auth-foto { min-height: 560px; }
+.auth-foto img { object-position: center 35%; }
+.auth-form { max-width: 420px; }
+
+// Penanda langkah alur pendaftaran
+.badge-langkah { font-size: .8125rem; padding: .45em .85em; }
