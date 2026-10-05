@@ -3,20 +3,21 @@
 @section('title', 'Kelola User — '.config('app.name'))
 
 @section('content')
-<div class="container">
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+<div class="container admin-shell">
+    <div class="admin-header d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
         <div>
+            <p class="text-primary fw-semibold mb-2 text-uppercase small">Admin</p>
             <h1 class="h3 mb-1">Kelola User</h1>
-            <p class="text-muted mb-0">Daftar seluruh akun beserta peran dan statusnya.</p>
+            <p class="text-secondary mb-0">Daftar seluruh akun beserta peran, jenis pengguna, dan status aktifnya.</p>
         </div>
-        <a href="/admin/users/create" class="btn btn-primary">+ Buat Akun</a>
+        <a href="/admin/users/create" class="btn btn-primary">Buat Akun</a>
     </div>
 
-    <div class="card shadow-sm mb-4">
+    <div class="admin-filter-card shadow-sm mb-4">
         <div class="card-body">
-            <form method="GET" action="/admin/users" class="row g-2 align-items-end">
+            <form method="GET" action="/admin/users" class="admin-filter-form row g-2 align-items-end">
                 <div class="col-sm-4">
-                    <label for="role" class="form-label small text-muted mb-1">Peran</label>
+                    <label for="role" class="form-label">Peran</label>
                     <select id="role" name="role" class="form-select">
                         <option value="">Semua peran</option>
                         @foreach (\App\Models\User::ROLES as $nilai => $label)
@@ -25,7 +26,7 @@
                     </select>
                 </div>
                 <div class="col-sm-4">
-                    <label for="status" class="form-label small text-muted mb-1">Status</label>
+                    <label for="status" class="form-label">Status</label>
                     <select id="status" name="status" class="form-select">
                         <option value="">Semua status</option>
                         @foreach (\App\Models\User::STATUSES as $nilai => $label)
@@ -43,10 +44,10 @@
         </div>
     </div>
 
-    <div class="card shadow-sm">
+    <div class="admin-table-card shadow-sm">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
-                <thead class="table-light">
+                <thead>
                     <tr>
                         <th>Nama</th>
                         <th>Email</th>

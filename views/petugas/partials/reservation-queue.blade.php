@@ -8,16 +8,17 @@
 @endphp
 
 @if ($pendingReservations->isEmpty())
-    <p class="text-muted mb-0">Tidak ada reservasi menunggu.</p>
+    <div class="text-muted mb-0">Tidak ada reservasi menunggu.</div>
 @else
-    <div class="list-group list-group-flush">
+    <div class="petugas-widget">
         @foreach ($pendingReservations as $reservation)
-            <a href="{{ route('petugas.reservations.show', $reservation) }}" class="list-group-item list-group-item-action px-0">
-                <div class="d-flex justify-content-between gap-2">
+            <a href="{{ route('petugas.reservations.show', $reservation) }}" class="petugas-widget-item">
+                <div class="item-top">
                     <strong>{{ $reservation->facility->name }}</strong>
-                    <small>{{ $reservation->reservation_date->format('d/m/Y') }}</small>
+                    <span class="badge text-bg-warning">Menunggu</span>
                 </div>
-                <div class="small text-muted">{{ $reservation->user->name }} · {{ $reservation->timeRange() }} WIB</div>
+                <div class="small text-muted mb-1">{{ $reservation->user->name }}</div>
+                <small>{{ $reservation->reservation_date->format('d/m/Y') }} · {{ $reservation->timeRange() }} WIB</small>
             </a>
         @endforeach
     </div>

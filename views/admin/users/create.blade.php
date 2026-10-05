@@ -3,23 +3,25 @@
 @section('title', 'Buat Akun — '.config('app.name'))
 
 @section('content')
-<div class="container">
+<div class="container admin-shell">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white fw-semibold">Buat Akun Baru</div>
+        <div class="col-lg-8">
+            <div class="admin-user-form-card shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h1 class="h5 mb-0">Buat Akun Baru</h1>
+                </div>
 
                 <div class="card-body">
-                    <p class="text-muted small">
-                        Akun yang dibuat di sini langsung berstatus aktif dan bisa segera masuk.
+                    <p class="text-secondary small mb-4">
+                        Akun yang dibuat di sini langsung berstatus aktif dan siap digunakan.
                         Pembuatan akun petugas hanya bisa dilakukan lewat halaman ini.
                     </p>
 
-                    <form method="POST" action="/admin/users" id="form-buat-akun" novalidate>
+                    <form method="POST" action="/admin/users" id="form-buat-akun" class="admin-user-form" novalidate>
                         @csrf
 
-                        <div class="row mb-3">
-                            <label for="name" class="col-md-4 col-form-label text-md-end">Nama Lengkap</label>
+                        <div class="row mb-3 align-items-center">
+                            <label for="name" class="col-md-4 col-form-label row-label text-md-end">Nama Lengkap</label>
                             <div class="col-md-6">
                                 <input id="name" type="text" name="name" value="{{ old('name') }}"
                                        class="form-control @error('name') is-invalid @enderror"
@@ -30,8 +32,8 @@
                             </div>
                         </div>
 
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">Alamat Email</label>
+                        <div class="row mb-3 align-items-center">
+                            <label for="email" class="col-md-4 col-form-label row-label text-md-end">Alamat Email</label>
                             <div class="col-md-6">
                                 <input id="email" type="email" name="email" value="{{ old('email') }}"
                                        class="form-control @error('email') is-invalid @enderror"
@@ -42,8 +44,8 @@
                             </div>
                         </div>
 
-                        <div class="row mb-3">
-                            <label for="role" class="col-md-4 col-form-label text-md-end">Peran</label>
+                        <div class="row mb-3 align-items-center">
+                            <label for="role" class="col-md-4 col-form-label row-label text-md-end">Peran</label>
                             <div class="col-md-6">
                                 <select id="role" name="role"
                                         class="form-select @error('role') is-invalid @enderror" required>
@@ -59,8 +61,8 @@
                             </div>
                         </div>
 
-                        <div class="row mb-3" id="baris-jenis">
-                            <label for="user_type" class="col-md-4 col-form-label text-md-end">Jenis Pengguna</label>
+                        <div class="row mb-3 align-items-center" id="baris-jenis">
+                            <label for="user_type" class="col-md-4 col-form-label row-label text-md-end">Jenis Pengguna</label>
                             <div class="col-md-6">
                                 <select id="user_type" name="user_type"
                                         class="form-select @error('user_type') is-invalid @enderror">
@@ -76,8 +78,8 @@
                             </div>
                         </div>
 
-                        <div class="row mb-3">
-                            <label for="identity_number" class="col-md-4 col-form-label text-md-end">
+                        <div class="row mb-3 align-items-center">
+                            <label for="identity_number" class="col-md-4 col-form-label row-label text-md-end">
                                 NIM / NIP <span class="text-muted fw-normal">(opsional)</span>
                             </label>
                             <div class="col-md-6">
@@ -91,8 +93,8 @@
                             </div>
                         </div>
 
-                        <div class="row mb-3">
-                            <label for="password" class="col-md-4 col-form-label text-md-end">Kata Sandi</label>
+                        <div class="row mb-3 align-items-center">
+                            <label for="password" class="col-md-4 col-form-label row-label text-md-end">Kata Sandi</label>
                             <div class="col-md-6">
                                 <input id="password" type="password" name="password"
                                        class="form-control @error('password') is-invalid @enderror"
@@ -104,8 +106,8 @@
                             </div>
                         </div>
 
-                        <div class="row mb-3">
-                            <label for="password-confirm" class="col-md-4 col-form-label text-md-end">Ulangi Kata Sandi</label>
+                        <div class="row mb-4 align-items-center">
+                            <label for="password-confirm" class="col-md-4 col-form-label row-label text-md-end">Ulangi Kata Sandi</label>
                             <div class="col-md-6">
                                 <input id="password-confirm" type="password" name="password_confirmation"
                                        class="form-control" required minlength="8" autocomplete="new-password">
@@ -113,7 +115,7 @@
                         </div>
 
                         <div class="row mb-0">
-                            <div class="col-md-6 offset-md-4">
+                            <div class="col-md-6 offset-md-4 d-flex gap-2 flex-wrap">
                                 <button type="submit" class="btn btn-primary">Simpan Akun</button>
                                 <a href="/admin/users" class="btn btn-outline-secondary">Batal</a>
                             </div>
@@ -128,7 +130,6 @@
 
 @push('scripts')
 <script>
-    // Jenis pengguna hanya relevan untuk peran pengguna; server tetap memvalidasi ulang.
     (function () {
         const peran = document.getElementById('role');
         const jenis = document.getElementById('user_type');
@@ -153,7 +154,7 @@
 
             if (sandi.value !== ulangi.value) {
                 e.preventDefault();
-                ulangi.setCustomValidity('Ulangi kata sandi harus sama dengan kata sandi.');
+                ulangi.setCustomValidity('Kata sandi tidak cocok.');
                 ulangi.reportValidity();
                 return;
             }

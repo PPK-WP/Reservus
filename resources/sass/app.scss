@@ -87,3 +87,408 @@
 
 // Penanda langkah alur pendaftaran
 .badge-langkah { font-size: .8125rem; padding: .45em .85em; }
+
+// -----------------------------
+// Reservasi pengguna (P2)
+// -----------------------------
+
+.reservasi-shell { max-width: 1160px; }
+
+.reservasi-header {
+    border: 1px solid rgba($undip-kobalt, .12);
+    background: linear-gradient(180deg, rgba($undip-kobalt-muda, .9), rgba(#fff, .95));
+    border-radius: $border-radius-lg;
+    padding: 1.5rem;
+}
+
+.reservasi-header .subtitle { max-width: 60ch; }
+
+.reservasi-filters .nav-pills .nav-link {
+    border-radius: 999px;
+    padding: .55rem 1rem;
+    font-weight: 600;
+    color: $secondary;
+}
+
+.reservasi-filters .nav-pills .nav-link.active {
+    background-color: $undip-kobalt;
+    color: #fff;
+}
+
+.reservasi-list { display: grid; gap: 1rem; }
+
+.reservasi-card {
+    border: 1px solid $border-color;
+    border-radius: $border-radius-lg;
+    background: #fff;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out, transform .15s ease-in-out;
+}
+
+.reservasi-card:hover,
+.reservasi-card:focus-within {
+    border-color: rgba($undip-kobalt, .45);
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .04);
+    transform: translateY(-1px);
+}
+
+.reservasi-card .card-body { padding: 1.25rem 1.25rem 1rem; }
+
+.reservasi-card .detail-link {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    font-weight: 600;
+    color: $undip-kobalt;
+}
+
+.reservasi-card .detail-link:hover { color: $undip-kobalt-tua; }
+
+.reservasi-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem .75rem;
+    color: $secondary;
+    font-size: .8125rem;
+}
+
+.reservasi-pengantar {
+    border: 1px solid rgba($undip-kobalt, .18);
+    background: $undip-kobalt-muda;
+    border-radius: $border-radius-lg;
+    padding: 1rem 1.25rem;
+}
+
+.icon-wrap,
+.reservasi-pengantar .icon-wrap {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: .75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba($undip-kobalt, .08);
+    color: $undip-kobalt;
+}
+
+.reservasi-form-card {
+    border: 1px solid $border-color;
+    border-radius: $border-radius-lg;
+    background: #fff;
+    overflow: hidden;
+}
+
+.reservasi-form-card .card-header {
+    background: rgba($undip-kobalt-muda, .55);
+    border-bottom: 1px solid $border-color;
+    padding: 1rem 1.25rem;
+}
+
+.reservasi-form-card .card-body { padding: 1.5rem; }
+
+.reservasi-form-card .card-footer {
+    border-top: 1px solid $border-color;
+    background: #fff;
+    padding: 1rem 1.25rem;
+}
+
+.reservasi-form-grid .form-label {
+    margin-bottom: .5rem;
+    font-weight: 600;
+    color: $tinta;
+}
+
+.reservasi-help {
+    border: 1px solid rgba($undip-kobalt, .2);
+    background: rgba($undip-kobalt-muda, .5);
+    border-radius: $border-radius;
+    padding: 1rem 1.125rem;
+}
+
+.reservasi-detail-layout {
+    display: grid;
+    grid-template-columns: 1.45fr .95fr;
+    gap: 1.5rem;
+}
+
+.reservasi-detail-card,
+.reservasi-side-card {
+    border: 1px solid $border-color;
+    border-radius: $border-radius-lg;
+    background: #fff;
+    overflow: hidden;
+}
+
+.reservasi-detail-card .card-body,
+.reservasi-side-card .card-body {
+    padding: 1.5rem;
+}
+
+.reservasi-detail-header {
+    border-bottom: 1px solid $border-color;
+    background: rgba($undip-kobalt-muda, .55);
+    padding: 1rem 1.25rem;
+}
+
+.reservasi-detail-grid {
+    display: grid;
+    grid-template-columns: 132px 1fr;
+    gap: .625rem 1rem;
+    align-items: start;
+}
+
+.reservasi-detail-grid dt {
+    font-weight: 600;
+    color: $secondary;
+    margin: 0;
+}
+
+.reservasi-detail-grid dd {
+    margin: 0;
+    color: $tinta;
+}
+
+.reservasi-side-card .card-header {
+    background: #fff;
+    border-bottom: 1px solid $border-color;
+    padding: 1rem 1.25rem;
+}
+
+.reservasi-status-panel {
+    border: 1px solid rgba($undip-kobalt, .15);
+    background: rgba($undip-kobalt-muda, .35);
+    border-radius: $border-radius;
+    padding: 1rem;
+}
+
+@media (max-width: 767.98px) {
+    .reservasi-header { padding: 1.25rem; }
+    .reservasi-detail-layout { grid-template-columns: 1fr; }
+    .reservasi-detail-grid { grid-template-columns: 1fr; gap: .25rem; }
+    .reservasi-form-card .card-body { padding: 1.1rem; }
+}
+
+// -----------------------------
+// Petugas reservasi (P2)
+// -----------------------------
+
+.petugas-shell { max-width: 1160px; }
+
+.petugas-header {
+    border: 1px solid rgba($undip-kobalt, .12);
+    background: linear-gradient(180deg, rgba($undip-kobalt-muda, .9), rgba(#fff, .95));
+    border-radius: $border-radius-lg;
+    padding: 1.5rem;
+}
+
+.petugas-tabs .nav-pills .nav-link {
+    border-radius: 999px;
+    padding: .55rem 1rem;
+    font-weight: 600;
+    color: $secondary;
+}
+
+.petugas-tabs .nav-pills .nav-link.active {
+    background-color: $undip-kobalt;
+    color: #fff;
+}
+
+.petugas-table-card {
+    border: 1px solid $border-color;
+    border-radius: $border-radius-lg;
+    background: #fff;
+    overflow: hidden;
+}
+
+.petugas-table-card thead th {
+    background: rgba($undip-kobalt-muda, .55);
+    color: $secondary;
+    font-size: .77rem;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+    border-bottom-color: $border-color;
+}
+
+.petugas-queue-row.table-row-aktif > * {
+    background-color: rgba($undip-kobalt-muda, .75) !important;
+}
+
+.petugas-queue-row td {
+    padding-top: .95rem;
+    padding-bottom: .95rem;
+    vertical-align: middle;
+}
+
+.petugas-detail-layout {
+    display: grid;
+    grid-template-columns: 1.5fr .95fr;
+    gap: 1.5rem;
+}
+
+.petugas-detail-card,
+.petugas-actions-card {
+    border: 1px solid $border-color;
+    border-radius: $border-radius-lg;
+    background: #fff;
+    overflow: hidden;
+}
+
+.petugas-detail-card .card-header,
+.petugas-actions-card .card-header {
+    background: rgba($undip-kobalt-muda, .55);
+    border-bottom: 1px solid $border-color;
+    padding: 1rem 1.25rem;
+}
+
+.petugas-detail-card .card-body,
+.petugas-actions-card .card-body {
+    padding: 1.5rem;
+}
+
+.petugas-info-grid {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: .7rem 1rem;
+    align-items: start;
+}
+
+.petugas-info-grid dt {
+    margin: 0;
+    color: $secondary;
+    font-weight: 600;
+}
+
+.petugas-info-grid dd {
+    margin: 0;
+    color: $tinta;
+}
+
+.petugas-status-panel {
+    border: 1px solid rgba($undip-kobalt, .18);
+    background: rgba($undip-kobalt-muda, .45);
+    border-radius: $border-radius;
+    padding: 1rem;
+}
+
+.petugas-action-box {
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    background: #fff;
+    padding: 1rem;
+}
+
+.petugas-widget {
+    display: grid;
+    gap: .75rem;
+}
+
+.petugas-widget-item {
+    display: block;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    background: #fff;
+    padding: .8rem .9rem;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color .15s ease-in-out, background-color .15s ease-in-out;
+}
+
+.petugas-widget-item:hover,
+.petugas-widget-item:focus-visible {
+    border-color: rgba($undip-kobalt, .45);
+    background: rgba($undip-kobalt-muda, .25);
+    text-decoration: none;
+    color: inherit;
+}
+
+.petugas-widget-item .item-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    margin-bottom: .35rem;
+}
+
+.petugas-widget-item small {
+    color: $secondary;
+}
+
+@media (max-width: 767.98px) {
+    .petugas-header { padding: 1.25rem; }
+    .petugas-detail-layout { grid-template-columns: 1fr; }
+    .petugas-info-grid { grid-template-columns: 1fr; gap: .25rem; }
+}
+
+// -----------------------------
+// Admin user (P2)
+// -----------------------------
+
+.admin-shell { max-width: 1160px; }
+
+.admin-header {
+    border: 1px solid rgba($undip-kobalt, .12);
+    background: linear-gradient(180deg, rgba($undip-kobalt-muda, .9), rgba(#fff, .95));
+    border-radius: $border-radius-lg;
+    padding: 1.5rem;
+}
+
+.admin-filter-card {
+    border: 1px solid $border-color;
+    border-radius: $border-radius-lg;
+    background: #fff;
+}
+
+.admin-filter-form .form-label {
+    margin-bottom: .4rem;
+    font-size: .75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .02em;
+    color: $secondary;
+}
+
+.admin-table-card {
+    border: 1px solid $border-color;
+    border-radius: $border-radius-lg;
+    background: #fff;
+    overflow: hidden;
+}
+
+.admin-table-card thead th {
+    background: rgba($undip-kobalt-muda, .55);
+    color: $secondary;
+    font-size: .77rem;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+    border-bottom-color: $border-color;
+}
+
+.admin-user-form-card {
+    border: 1px solid $border-color;
+    border-radius: $border-radius-lg;
+    background: #fff;
+    overflow: hidden;
+}
+
+.admin-user-form-card .card-header {
+    background: rgba($undip-kobalt-muda, .55);
+    border-bottom: 1px solid $border-color;
+    padding: 1rem 1.25rem;
+}
+
+.admin-user-form-card .card-body {
+    padding: 1.5rem;
+}
+
+.admin-user-form .row-label {
+    font-weight: 600;
+    color: $tinta;
+}
+
+.admin-user-form .form-text {
+    color: $secondary;
+}
+
+@media (max-width: 767.98px) {
+    .admin-header { padding: 1.25rem; }
+    .admin-user-form-card .card-body { padding: 1.1rem; }
+}
