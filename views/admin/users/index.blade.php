@@ -4,7 +4,13 @@
 
 @push('styles')
 <style>
-    .tabel-akun { min-width: 780px; }
+    .tabel-akun { min-width: 820px; }
+
+    .inisial-akun {
+        width: 2.35rem;
+        height: 2.35rem;
+        font-size: .8125rem;
+    }
 </style>
 @endpush
 
@@ -25,7 +31,15 @@
 
     <div class="card mb-4">
         <div class="card-header bg-white py-3">
-            <h2 class="h6 mb-0">Saring daftar akun</h2>
+            <div class="d-flex align-items-center gap-3">
+                <span class="ikon-kotak flex-shrink-0" aria-hidden="true">
+                    <x-ikon nama="search" />
+                </span>
+                <div>
+                    <h2 class="h6 mb-1">Saring daftar akun</h2>
+                    <p class="small text-secondary mb-0">Persempit daftar berdasarkan peran dan status akses.</p>
+                </div>
+            </div>
         </div>
         <div class="card-body">
             <form method="GET" action="/admin/users" class="row g-3 align-items-end">
@@ -60,7 +74,7 @@
     <div class="card">
         <div class="card-header bg-white d-flex flex-wrap justify-content-between align-items-center gap-2 py-3">
             <h2 class="h6 mb-0">Daftar akun</h2>
-            <span class="small text-secondary">{{ $users->total() }} akun</span>
+            <span class="badge text-bg-light border text-dark fw-medium">{{ $users->total() }} akun</span>
         </div>
 
         <div class="table-responsive">
@@ -78,9 +92,20 @@
                 <tbody>
                     @forelse ($users as $user)
                         <tr class="{{ $user->status === 'pending' ? 'table-row-aktif' : '' }}">
-                            <td class="fw-semibold">{{ $user->name }}</td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="inisial-akun rounded-circle border bg-white text-primary d-inline-flex align-items-center justify-content-center fw-bold flex-shrink-0" aria-hidden="true">
+                                        {{ Str::upper(Str::substr($user->name, 0, 1)) }}
+                                    </span>
+                                    <span class="fw-semibold">{{ $user->name }}</span>
+                                </div>
+                            </td>
                             <td>{{ $user->email }}</td>
-                            <td>{{ \App\Models\User::ROLES[$user->role] ?? $user->role }}</td>
+                            <td>
+                                <span class="badge text-bg-light border text-dark fw-medium">
+                                    {{ \App\Models\User::ROLES[$user->role] ?? $user->role }}
+                                </span>
+                            </td>
                             <td>{{ $user->user_type ? (\App\Models\User::USER_TYPES[$user->user_type] ?? $user->user_type) : '-' }}</td>
                             <td>{{ $user->identity_number ?: '-' }}</td>
                             <td><x-status-badge :status="$user->status" /></td>
