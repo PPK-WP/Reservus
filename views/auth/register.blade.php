@@ -11,9 +11,6 @@
                 <img src="{{ asset('images/brand/monumen-undip.webp') }}"
                      alt="Monumen bertuliskan Universitas Diponegoro di halaman kampus"
                      class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover">
-                <span class="position-absolute bottom-0 start-0 m-2 px-2 py-1 rounded bg-white bg-opacity-75 small text-secondary">
-                    Foto: Pinterest
-                </span>
             </div>
 
             <div class="col-lg-7 bg-white">
