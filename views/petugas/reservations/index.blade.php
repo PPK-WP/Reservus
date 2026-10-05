@@ -4,7 +4,13 @@
 
 @push('styles')
 <style>
-    .tabel-antrean-reservasi { min-width: 920px; }
+    .tabel-antrean-reservasi { min-width: 960px; }
+
+    .inisial-pemohon {
+        width: 2.35rem;
+        height: 2.35rem;
+        font-size: .8125rem;
+    }
 </style>
 @endpush
 
@@ -51,8 +57,11 @@
     @else
         <div class="card">
             <div class="card-header bg-white d-flex flex-wrap justify-content-between align-items-center gap-2 py-3">
-                <h2 class="h6 mb-0">Daftar reservasi</h2>
-                <span class="small text-secondary">{{ $reservations->total() }} data</span>
+                <div>
+                    <h2 class="h6 mb-1">Daftar reservasi</h2>
+                    <p class="small text-secondary mb-0">Reservasi menunggu ditandai dengan latar kobalt muda.</p>
+                </div>
+                <span class="badge text-bg-light border text-dark fw-medium">{{ $reservations->total() }} data</span>
             </div>
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0 tabel-antrean-reservasi">
@@ -70,16 +79,28 @@
                         @foreach ($reservations as $reservation)
                             <tr class="{{ $reservation->status === 'menunggu' ? 'table-row-aktif' : '' }}">
                                 <td>
-                                    <div class="fw-semibold">{{ $reservation->user->name }}</div>
-                                    <small class="text-secondary">{{ $reservation->user->email }}</small>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="inisial-pemohon rounded-circle border bg-white text-primary d-inline-flex align-items-center justify-content-center fw-bold flex-shrink-0" aria-hidden="true">
+                                            {{ Str::upper(Str::substr($reservation->user->name, 0, 1)) }}
+                                        </span>
+                                        <div class="min-w-0">
+                                            <div class="fw-semibold">{{ $reservation->user->name }}</div>
+                                            <small class="text-secondary">{{ $reservation->user->email }}</small>
+                                        </div>
+                                    </div>
                                 </td>
                                 <td>
                                     <div class="fw-semibold">{{ $reservation->facility->name }}</div>
-                                    <small class="text-secondary">{{ $reservation->facility->location }}</small>
+                                    <small class="text-secondary">#{{ $reservation->id }} · {{ $reservation->facility->location }}</small>
                                 </td>
                                 <td>
-                                    <div>{{ $reservation->reservation_date->format('d/m/Y') }}</div>
-                                    <small class="text-secondary">{{ $reservation->timeRange() }} WIB</small>
+                                    <div class="d-inline-flex align-items-center gap-2 bg-kobalt-muda rounded-2 px-2 py-1">
+                                        <x-ikon nama="calendar-check" />
+                                        <span>
+                                            <span class="d-block fw-semibold">{{ $reservation->reservation_date->format('d/m/Y') }}</span>
+                                            <small class="text-secondary">{{ $reservation->timeRange() }} WIB</small>
+                                        </span>
+                                    </div>
                                 </td>
                                 <td class="text-body-secondary">{{ Str::limit($reservation->purpose, 70) }}</td>
                                 <td>

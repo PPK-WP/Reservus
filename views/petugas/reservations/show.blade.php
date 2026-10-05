@@ -21,10 +21,35 @@
     <div class="row g-4 align-items-start">
         <div class="col-lg-7">
             <article class="card">
-                <div class="card-header bg-white py-3">
+                <div class="card-header bg-kobalt-muda py-3">
                     <h2 class="h6 mb-0">Informasi pengajuan</h2>
                 </div>
                 <div class="card-body p-3 p-md-4">
+                    <section class="border rounded-3 p-3 mb-4" aria-label="Jadwal reservasi">
+                        <div class="row g-3">
+                            <div class="col-sm-6 d-flex align-items-center gap-3">
+                                <span class="ikon-kotak flex-shrink-0" aria-hidden="true">
+                                    <x-ikon nama="calendar-check" />
+                                </span>
+                                <div>
+                                    <span class="small text-secondary d-block">Tanggal</span>
+                                    <time datetime="{{ $reservation->reservation_date->format('Y-m-d') }}" class="fw-semibold">
+                                        {{ $reservation->reservation_date->format('d/m/Y') }}
+                                    </time>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 d-flex align-items-center gap-3">
+                                <span class="ikon-kotak flex-shrink-0" aria-hidden="true">
+                                    <x-ikon nama="clock-history" />
+                                </span>
+                                <div>
+                                    <span class="small text-secondary d-block">Waktu</span>
+                                    <span class="fw-semibold">{{ $reservation->timeRange() }} WIB</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
                     <dl class="row gy-3 mb-0">
                         <dt class="col-sm-4 text-secondary fw-medium">Pemohon</dt>
                         <dd class="col-sm-8 mb-0">
@@ -37,12 +62,6 @@
                             <span class="d-block fw-semibold">{{ $reservation->facility->name }}</span>
                             <span class="small text-secondary">{{ $reservation->facility->location }}</span>
                         </dd>
-
-                        <dt class="col-sm-4 text-secondary fw-medium">Tanggal</dt>
-                        <dd class="col-sm-8 mb-0">{{ $reservation->reservation_date->format('d/m/Y') }}</dd>
-
-                        <dt class="col-sm-4 text-secondary fw-medium">Waktu</dt>
-                        <dd class="col-sm-8 mb-0">{{ $reservation->timeRange() }} WIB</dd>
 
                         <dt class="col-sm-4 text-secondary fw-medium">Status fasilitas</dt>
                         <dd class="col-sm-8 mb-0"><x-status-badge :status="$reservation->facility->status" /></dd>
@@ -80,13 +99,16 @@
 
         <div class="col-lg-5">
             @if ($reservation->status === 'menunggu')
-                <aside class="card" aria-labelledby="keputusan-petugas">
+                <aside class="card border-top border-primary border-3" aria-labelledby="keputusan-petugas">
                     <div class="card-header bg-white py-3">
                         <h2 id="keputusan-petugas" class="h6 mb-0">Keputusan petugas</h2>
                     </div>
                     <div class="card-body p-3 p-md-4">
-                        <section class="pb-4 border-bottom">
-                            <h3 class="h6 mb-1">Setujui reservasi</h3>
+                        <section class="border rounded-3 p-3 mb-3">
+                            <h3 class="h6 d-flex align-items-center gap-2 mb-1">
+                                <x-ikon nama="check-circle" class="text-success" />
+                                <span>Setujui reservasi</span>
+                            </h3>
                             <p class="small text-secondary mb-3">Jadwal dan status fasilitas akan diperiksa ulang secara otomatis.</p>
                             <form method="POST" action="{{ route('petugas.reservations.approve', $reservation) }}"
                                   onsubmit="return confirm('Setujui reservasi ini?');">
@@ -96,8 +118,11 @@
                             </form>
                         </section>
 
-                        <section class="pt-4">
-                            <h3 class="h6 mb-1">Tolak reservasi</h3>
+                        <section class="border rounded-3 p-3">
+                            <h3 class="h6 d-flex align-items-center gap-2 mb-1">
+                                <x-ikon nama="exclamation-triangle" class="text-danger" />
+                                <span>Tolak reservasi</span>
+                            </h3>
                             <p class="small text-secondary mb-3">Sertakan alasan yang jelas agar dapat dipahami pemohon.</p>
                             <form method="POST" action="{{ route('petugas.reservations.reject', $reservation) }}">
                                 @csrf
@@ -114,7 +139,7 @@
                     </div>
                 </aside>
             @elseif ($reservation->status === 'disetujui' && $reservation->startsAt()->isFuture())
-                <aside class="card" aria-labelledby="pembatalan-darurat">
+                <aside class="card border-top border-danger border-3" aria-labelledby="pembatalan-darurat">
                     <div class="card-header bg-white py-3">
                         <h2 id="pembatalan-darurat" class="h6 mb-0">Pembatalan darurat</h2>
                     </div>
@@ -134,7 +159,7 @@
                     </div>
                 </aside>
             @else
-                <aside class="card">
+                <aside class="card border-top border-primary border-3">
                     <div class="card-body p-3 p-md-4 text-center">
                         <span class="ikon-kotak mb-3" aria-hidden="true">
                             <x-ikon nama="check-circle" ukuran="1.35rem" />
