@@ -30,8 +30,15 @@
             <form method="POST" action="{{ route('reservations.store') }}" class="card">
                 @csrf
                 <div class="card-header bg-white py-3">
-                    <h2 class="h6 mb-1">Fasilitas dan jadwal</h2>
-                    <p class="small text-secondary mb-0">Semua waktu menggunakan zona WIB.</p>
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="ikon-kotak flex-shrink-0" aria-hidden="true">
+                            <x-ikon nama="calendar-check" ukuran="1.2rem" />
+                        </span>
+                        <div>
+                            <h2 class="h6 mb-1">Fasilitas dan jadwal</h2>
+                            <p class="small text-secondary mb-0">Lengkapi detail penggunaan fasilitas kampus.</p>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="card-body p-3 p-md-4">
@@ -51,41 +58,46 @@
                         @error('facility_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
 
-                    <div class="row g-3 mb-4">
-                        <div class="col-12">
-                            <label for="reservation_date" class="form-label fw-medium">Tanggal reservasi</label>
-                            <input type="date" id="reservation_date" name="reservation_date"
-                                   value="{{ old('reservation_date', $selectedDate) }}"
-                                   class="form-control @error('reservation_date') is-invalid @enderror"
-                                   aria-describedby="date-help" required>
-                            <div id="date-help" class="form-text">Pilih tanggal hari ini sampai 30 hari ke depan.</div>
-                            @error('reservation_date') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                        </div>
+                    <fieldset class="bg-kobalt-muda border rounded-3 p-3 p-md-4 mb-4">
+                        <legend class="float-none w-auto h6 px-2 mb-2">Jadwal penggunaan</legend>
+                        <p class="small text-secondary mb-3">Jam operasional 07.00 sampai 20.00 WIB dengan interval 30 menit.</p>
 
-                        <div class="col-md-6">
-                            <label for="start_time" class="form-label fw-medium">Jam mulai</label>
-                            <select id="start_time" name="start_time"
-                                    class="form-select @error('start_time') is-invalid @enderror" required>
-                                <option value="">Pilih jam mulai</option>
-                                @foreach ($availability->startOptions() as $time)
-                                    <option value="{{ $time }}" @selected(old('start_time') === $time)>{{ str_replace(':', '.', $time) }}</option>
-                                @endforeach
-                            </select>
-                            @error('start_time') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                        </div>
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label for="reservation_date" class="form-label fw-medium">Tanggal reservasi</label>
+                                <input type="date" id="reservation_date" name="reservation_date"
+                                       value="{{ old('reservation_date', $selectedDate) }}"
+                                       class="form-control @error('reservation_date') is-invalid @enderror"
+                                       aria-describedby="date-help" required>
+                                <div id="date-help" class="form-text">Pilih tanggal hari ini sampai 30 hari ke depan.</div>
+                                @error('reservation_date') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
 
-                        <div class="col-md-6">
-                            <label for="end_time" class="form-label fw-medium">Jam selesai</label>
-                            <select id="end_time" name="end_time"
-                                    class="form-select @error('end_time') is-invalid @enderror" required>
-                                <option value="">Pilih jam selesai</option>
-                                @foreach ($availability->endOptions() as $time)
-                                    <option value="{{ $time }}" @selected(old('end_time') === $time)>{{ str_replace(':', '.', $time) }}</option>
-                                @endforeach
-                            </select>
-                            @error('end_time') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            <div class="col-md-6">
+                                <label for="start_time" class="form-label fw-medium">Jam mulai</label>
+                                <select id="start_time" name="start_time"
+                                        class="form-select @error('start_time') is-invalid @enderror" required>
+                                    <option value="">Pilih jam mulai</option>
+                                    @foreach ($availability->startOptions() as $time)
+                                        <option value="{{ $time }}" @selected(old('start_time') === $time)>{{ str_replace(':', '.', $time) }}</option>
+                                    @endforeach
+                                </select>
+                                @error('start_time') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="end_time" class="form-label fw-medium">Jam selesai</label>
+                                <select id="end_time" name="end_time"
+                                        class="form-select @error('end_time') is-invalid @enderror" required>
+                                    <option value="">Pilih jam selesai</option>
+                                    @foreach ($availability->endOptions() as $time)
+                                        <option value="{{ $time }}" @selected(old('end_time') === $time)>{{ str_replace(':', '.', $time) }}</option>
+                                    @endforeach
+                                </select>
+                                @error('end_time') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
                         </div>
-                    </div>
+                    </fieldset>
 
                     <div>
                         <label for="purpose" class="form-label fw-medium">Tujuan penggunaan</label>
@@ -105,7 +117,7 @@
         </div>
 
         <div class="col-lg-4">
-            <aside class="card" aria-labelledby="info-pengajuan">
+            <aside class="card border-top border-primary border-3" aria-labelledby="info-pengajuan">
                 <div class="card-body p-3 p-md-4">
                     <span class="ikon-kotak mb-3" aria-hidden="true">
                         <x-ikon nama="info-circle" ukuran="1.35rem" />

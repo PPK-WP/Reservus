@@ -21,7 +21,7 @@
     <div class="row g-4 align-items-start">
         <div class="col-lg-8">
             <article class="card">
-                <div class="card-header bg-white py-3">
+                <div class="card-header bg-kobalt-muda py-3">
                     <div class="d-flex align-items-start gap-3">
                         <span class="ikon-kotak flex-shrink-0" aria-hidden="true">
                             <x-ikon nama="building" ukuran="1.3rem" />
@@ -34,15 +34,34 @@
                 </div>
 
                 <div class="card-body p-3 p-md-4">
+                    <section class="border rounded-3 p-3 mb-4" aria-label="Jadwal reservasi">
+                        <div class="row g-3">
+                            <div class="col-sm-6 d-flex align-items-center gap-3">
+                                <span class="ikon-kotak flex-shrink-0" aria-hidden="true">
+                                    <x-ikon nama="calendar-check" />
+                                </span>
+                                <div>
+                                    <span class="small text-secondary d-block">Tanggal</span>
+                                    <time datetime="{{ $reservation->reservation_date->format('Y-m-d') }}" class="fw-semibold">
+                                        {{ $reservation->reservation_date->format('d/m/Y') }}
+                                    </time>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 d-flex align-items-center gap-3">
+                                <span class="ikon-kotak flex-shrink-0" aria-hidden="true">
+                                    <x-ikon nama="clock-history" />
+                                </span>
+                                <div>
+                                    <span class="small text-secondary d-block">Waktu</span>
+                                    <span class="fw-semibold">{{ $reservation->timeRange() }} WIB</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
                     <dl class="row gy-3 mb-0">
                         <dt class="col-sm-4 text-secondary fw-medium">Nomor reservasi</dt>
                         <dd class="col-sm-8 mb-0">#{{ $reservation->id }}</dd>
-
-                        <dt class="col-sm-4 text-secondary fw-medium">Tanggal</dt>
-                        <dd class="col-sm-8 mb-0">{{ $reservation->reservation_date->format('d/m/Y') }}</dd>
-
-                        <dt class="col-sm-4 text-secondary fw-medium">Waktu</dt>
-                        <dd class="col-sm-8 mb-0">{{ $reservation->timeRange() }} WIB</dd>
 
                         <dt class="col-sm-4 text-secondary fw-medium">Tujuan</dt>
                         <dd class="col-sm-8 mb-0 teks-ringkas">{!! nl2br(e($reservation->purpose)) !!}</dd>
@@ -66,7 +85,7 @@
         </div>
 
         <div class="col-lg-4">
-            <aside class="card" aria-labelledby="status-reservasi">
+            <aside class="card border-top border-primary border-3" aria-labelledby="status-reservasi">
                 <div class="card-body p-3 p-md-4">
                     <h2 id="status-reservasi" class="h6 mb-3">Status reservasi</h2>
                     <div class="d-flex align-items-center justify-content-between gap-3 pb-3 border-bottom">
