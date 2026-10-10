@@ -4,87 +4,97 @@
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="mb-4">
-                <a href="{{ route('reports.index') }}" class="text-decoration-none">← Kembali ke Riwayat</a>
+    <div class="mb-4">
+        <a href="{{ route('reports.index') }}" class="d-inline-flex align-items-center gap-2 small text-decoration-none mb-3">
+            <span aria-hidden="true">&larr;</span>
+            <span>Kembali ke laporan saya</span>
+        </a>
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-start gap-2">
+            <div>
+                <h1 class="h3 mb-1">Detail Laporan</h1>
+                <p class="text-secondary mb-0">Informasi laporan dan status penanganannya.</p>
             </div>
+            <x-status-badge :status="$report->status" class="align-self-start" />
+        </div>
+    </div>
 
-            <div class="card shadow-sm">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Detail Laporan #{{ $report->id }}</h5>
-                    <x-status-badge :status="$report->status" />
+    <div class="row g-4 align-items-start">
+        <div class="col-lg-8">
+            <article class="card">
+                <div class="card-header bg-kobalt-muda py-3">
+                    <div class="d-flex align-items-start gap-3">
+                        <span class="ikon-kotak flex-shrink-0" aria-hidden="true">
+                            <x-ikon nama="building" ukuran="1.3rem" />
+                        </span>
+                        <div class="min-w-0">
+                            <h2 class="h5 mb-1">{{ $report->facility->name }}</h2>
+                            <p class="text-secondary mb-0">{{ $report->facility->location }}</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    {{-- Info fasilitas --}}
-                    <div class="row mb-3">
-                        <div class="col-sm-4 text-muted">Fasilitas</div>
-                        <div class="col-sm-8">
-                            {{ $report->facility->name }}
-                            <span class="text-muted small">({{ \App\Models\Facility::TYPES[$report->facility->type] ?? $report->facility->type }})</span>
-                        </div>
-                    </div>
 
-                    <div class="row mb-3">
-                        <div class="col-sm-4 text-muted">Lokasi</div>
-                        <div class="col-sm-8">{{ $report->facility->location }}</div>
-                    </div>
+                <div class="card-body p-3 p-md-4">
+                    <dl class="row gy-3 mb-0">
+                        <dt class="col-sm-4 text-secondary fw-medium">Kategori</dt>
+                        <dd class="col-sm-8 mb-0">
+                            <span class="badge text-bg-light text-dark border">{{ \App\Models\Report::CATEGORIES[$report->category] ?? $report->category }}</span>
+                        </dd>
 
-                    <div class="row mb-3">
-                        <div class="col-sm-4 text-muted">Kategori</div>
-                        <div class="col-sm-8">
-                            <span class="badge text-bg-light text-dark">{{ \App\Models\Report::CATEGORIES[$report->category] ?? $report->category }}</span>
-                        </div>
-                    </div>
+                        <dt class="col-sm-4 text-secondary fw-medium">Tipe fasilitas</dt>
+                        <dd class="col-sm-8 mb-0">
+                            {{ \App\Models\Facility::TYPES[$report->facility->type] ?? $report->facility->type }}
+                        </dd>
 
-                    <hr>
+                        <dt class="col-sm-4 text-secondary fw-medium">Tanggal lapor</dt>
+                        <dd class="col-sm-8 mb-0">{{ $report->created_at->format('d/m/Y H:i') }} WIB</dd>
 
-                    {{-- Deskripsi --}}
-                    <div class="mb-3">
-                        <h6 class="text-muted">Deskripsi</h6>
-                        <div>{!! nl2br(e($report->description)) !!}</div>
-                    </div>
+                        <dt class="col-sm-4 text-secondary fw-medium">Deskripsi</dt>
+                        <dd class="col-sm-8 mb-0 teks-ringkas">{!! nl2br(e($report->description)) !!}</dd>
+                    </dl>
 
-                    {{-- Foto --}}
                     @if ($report->photoUrl())
-                        <div class="mb-3">
-                            <h6 class="text-muted">Foto</h6>
+                        <div class="mt-4">
+                            <h3 class="h6 text-secondary mb-2">Foto</h3>
                             <a href="{{ $report->photoUrl() }}" target="_blank">
                                 <img src="{{ $report->photoUrl() }}" alt="Foto laporan"
-                                     class="img-fluid rounded" style="max-height: 400px;">
+                                     class="img-fluid rounded border" style="max-height: 400px;">
                             </a>
                         </div>
                     @endif
 
-                    <hr>
-
-                    {{-- Informasi pemrosesan --}}
-                    <div class="row mb-3">
-                        <div class="col-sm-4 text-muted">Tanggal Lapor</div>
-                        <div class="col-sm-8">{{ $report->created_at->format('d/m/Y H:i') }} WIB</div>
-                    </div>
-
                     @if ($report->processor)
-                        <div class="row mb-3">
-                            <div class="col-sm-4 text-muted">Diproses Oleh</div>
-                            <div class="col-sm-8">{{ $report->processor->name }}</div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-sm-4 text-muted">Waktu Proses</div>
-                            <div class="col-sm-8">{{ $report->processed_at->format('d/m/Y H:i') }} WIB</div>
+                        <div class="border-top mt-4 pt-4">
+                            <dl class="row gy-3 mb-0">
+                                <dt class="col-sm-4 text-secondary fw-medium">Diproses oleh</dt>
+                                <dd class="col-sm-8 mb-0">{{ $report->processor->name }}</dd>
+
+                                <dt class="col-sm-4 text-secondary fw-medium">Waktu proses</dt>
+                                <dd class="col-sm-8 mb-0">{{ $report->processed_at->format('d/m/Y H:i') }} WIB</dd>
+                            </dl>
                         </div>
                     @endif
 
                     @if ($report->resolution_note)
-                        <div class="mb-3">
-                            <h6 class="text-muted">Catatan Resolusi</h6>
-                            <div class="alert alert-light border mb-0">
-                                {!! nl2br(e($report->resolution_note)) !!}
-                            </div>
+                        <div class="alert alert-light border mt-4 mb-0">
+                            <h3 class="h6 alert-heading mb-1">Catatan resolusi</h3>
+                            <div>{!! nl2br(e($report->resolution_note)) !!}</div>
                         </div>
                     @endif
                 </div>
-            </div>
+            </article>
+        </div>
+
+        <div class="col-lg-4">
+            <aside class="card border-top border-primary border-3" aria-labelledby="status-laporan">
+                <div class="card-body p-3 p-md-4">
+                    <h2 id="status-laporan" class="h6 mb-3">Status laporan</h2>
+                    <div class="d-flex align-items-center justify-content-between gap-3 pb-3 border-bottom">
+                        <span class="small text-secondary">Status saat ini</span>
+                        <x-status-badge :status="$report->status" />
+                    </div>
+                    <p class="small text-secondary pt-3 mb-0">Laporan ini akan diproses oleh petugas. Pantau status penanganan di halaman ini.</p>
+                </div>
+            </aside>
         </div>
     </div>
 </div>
