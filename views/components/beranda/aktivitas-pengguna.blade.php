@@ -54,7 +54,7 @@
                         <a href="/reservations/{{ $reservasi->id }}"
                            class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 py-3">
                             <div class="min-w-0">
-                                <div class="fw-semibold text-body text-truncate">{{ $reservasi->facility->name }}</div>
+                                <div class="fw-semibold text-truncate judul-baris">{{ $reservasi->facility->name }}</div>
                                 <div class="small text-secondary">
                                     {{ $reservasi->reservation_date->translatedFormat('l, d M Y') }} · {{ $reservasi->timeRange() }}
                                 </div>
@@ -85,7 +85,7 @@
                         <a href="/reports/{{ $laporan->id }}"
                            class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 py-3">
                             <div class="min-w-0">
-                                <div class="fw-semibold text-body text-truncate">{{ $laporan->facility->name }}</div>
+                                <div class="fw-semibold text-truncate judul-baris">{{ $laporan->facility->name }}</div>
                                 <div class="small text-secondary">
                                     {{ \App\Models\Report::CATEGORIES[$laporan->category] ?? $laporan->category }}
                                     · {{ $laporan->created_at->timezone('Asia/Jakarta')->diffForHumans() }}

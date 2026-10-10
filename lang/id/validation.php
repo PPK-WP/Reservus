@@ -92,8 +92,8 @@ return [
     'url' => 'Format :attribute tidak valid.',
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'identity_number' => [
+            'regex' => 'NIM/NIP hanya boleh berisi angka, tanpa huruf, spasi, atau tanda baca.',
         ],
     ],
 

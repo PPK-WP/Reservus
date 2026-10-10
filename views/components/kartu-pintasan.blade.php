@@ -11,6 +11,6 @@
             <p class="small text-secondary mb-0">{{ $deskripsi }}</p>
             {{ $slot }}
         </div>
-        <x-ikon nama="arrow-right" class="text-secondary mt-1" />
+        <x-ikon nama="arrow-right" class="ikon-panah text-primary mt-1" />
     </div>
 </div>

@@ -47,7 +47,8 @@ class RegisterController extends Controller implements HasMiddleware
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'user_type' => ['required', Rule::in(array_keys(User::USER_TYPES))],
-            'identity_number' => ['nullable', 'string', 'max:30'],
+            // NIM/NIP hanya angka (tanpa huruf, spasi, atau tanda baca).
+            'identity_number' => ['nullable', 'string', 'max:30', 'regex:/^[0-9]+$/'],
         ]);
     }
 

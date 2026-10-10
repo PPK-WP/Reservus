@@ -223,10 +223,11 @@ class RecapController extends Controller
         }
 
         return [
-            'header' => [
+            // array_merge, bukan "+": operator + pada array berurutan membuang kunci 0..3 kategori.
+            'header' => array_merge([
                 'Kelompok', 'Lokasi / Jml Fasilitas Aktif', 'Reservasi Disetujui',
                 'Total Jam', 'Okupansi (%)', 'Laporan Total',
-            ] + array_values(Report::CATEGORIES),
+            ], array_map(fn (string $label): string => 'Laporan '.$label, array_values(Report::CATEGORIES))),
             'baris' => $baris,
             'totals' => $totals,
             'group_by' => $groupBy,

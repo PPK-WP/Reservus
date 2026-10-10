@@ -5,6 +5,8 @@ $undip-kobalt: #0047AB;
 $undip-kobalt-tua: #00337A;
 $undip-kobalt-muda: #E8EFF9;
 $fsm-silver: #A9B1BB;
+// Garis elemen yang bisa diklik: 3,36:1 terhadap $latar (WCAG 1.4.11 minimal 3:1)
+$garis-interaktif: #7D8794;
 $tinta: #1F2A37;
 $latar: #F4F6F9;
 
@@ -26,8 +28,15 @@ $h3-font-size: 1.5rem;
 $form-label-font-size: 0.875rem;
 $form-label-font-weight: 500;
 
-// Isian form tetap putih: Bootstrap 5.3 mengambil latar input dari $body-bg (sekarang abu-abu)
+// Permukaan kerja tetap putih (DESIGN.md §2 "kartu tetap putih"). Bootstrap 5.3 mengambil latar
+// komponen-komponen ini dari $body-bg, yang kini abu-abu — tanpa ini kartu menyatu dengan latar halaman.
 $input-bg: #fff;
+$card-bg: #fff;
+$card-cap-bg: #fff;
+$list-group-bg: #fff;
+$table-bg: #fff;
+$dropdown-bg: #fff;
+$modal-content-bg: #fff;
 
 // Bentuk
 $border-radius: .5rem;
@@ -35,3 +44,7 @@ $border-radius-lg: .75rem;
 $card-border-color: $border-color;
 $card-box-shadow: none;
 $btn-font-weight: 600;
+
+// Baris daftar yang bisa diklik: sorotan kobalt muda saat hover/aktif
+$list-group-hover-bg: $undip-kobalt-muda;
+$list-group-action-active-bg: darken($undip-kobalt-muda, 4%);

@@ -16,9 +16,47 @@
 
 // Kartu: garis tipis, tanpa bayangan abu-abu seragam
 .card { border-color: $border-color; }
-.card.card-interaktif { transition: border-color .15s ease-in-out; }
-.card.card-interaktif:hover,
-.card.card-interaktif:focus-within { border-color: $undip-kobalt; }
+
+// Kartu yang bisa diklik harus terlihat bisa diklik TANPA hover (layar sentuh tidak punya hover):
+// garis lebih tegas dari kartu statis, lalu hover/fokus memberi sorotan kobalt yang jelas.
+.card.card-interaktif {
+    border-color: $garis-interaktif;
+    cursor: pointer;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out, background-color .15s ease-in-out;
+}
+.card.card-interaktif:hover {
+    border-color: $undip-kobalt;
+    box-shadow: 0 0 0 1px $undip-kobalt, 0 .375rem 1rem rgba($tinta, .08);
+    background-color: mix($undip-kobalt-muda, #fff, 45%);
+}
+.card.card-interaktif:focus-within {
+    border-color: $undip-kobalt;
+    box-shadow: 0 0 0 3px rgba($undip-kobalt, .45);
+}
+.card.card-interaktif .stretched-link:focus-visible { outline: none; } // cincin fokus dipindah ke kartu
+.card.card-interaktif:hover .tanda-buka,
+.card.card-interaktif:focus-within .tanda-buka { color: $undip-kobalt-tua; text-decoration: underline; }
+.card.card-interaktif:hover .ikon-panah { transform: translateX(3px); color: $undip-kobalt; }
+.ikon-panah { transition: transform .15s ease-in-out; }
+
+// Penanda teks "Lihat …" pada kartu yang bisa diklik
+.tanda-buka { color: $undip-kobalt; font-weight: 600; font-size: .8125rem; }
+
+// Baris daftar yang bisa diklik: latar kobalt muda (lewat $list-group-action-hover-bg) + judul biru bergaris bawah
+.judul-baris { color: $tinta; }
+.list-group-item-action:hover .judul-baris,
+.list-group-item-action:focus-visible .judul-baris { color: $undip-kobalt; text-decoration: underline; }
+
+// Menu navbar ikut menunjukkan bisa diklik
+.navbar-undip .nav-link:hover { color: $undip-kobalt; }
+
+// Isian nonaktif harus terlihat nonaktif, bukan sekadar pudar
+.form-control:disabled,
+.form-select:disabled {
+    background-color: #E9ECEF;
+    color: #5B6573;
+    cursor: not-allowed;
+}
 
 // Baris tabel yang sedang dibuka / dipilih
 .table-row-aktif > * { background-color: $undip-kobalt-muda !important; }

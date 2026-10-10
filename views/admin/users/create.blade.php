@@ -103,7 +103,9 @@
                             <input id="identity_number" type="text" name="identity_number"
                                    value="{{ old('identity_number') }}"
                                    class="form-control @error('identity_number') is-invalid @enderror"
-                                   maxlength="30">
+                                   maxlength="30" inputmode="numeric" pattern="[0-9]*"
+                                   title="NIM/NIP hanya boleh berisi angka.">
+                            <div class="form-text">Hanya angka, maks. 30 digit.</div>
                             @error('identity_number')
                                 <div class="invalid-feedback" role="alert">{{ $message }}</div>
                             @enderror

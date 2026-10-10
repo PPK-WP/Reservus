@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Laporan Saya — '.config('app.name'))
+@section('title', 'Laporan Saya | '.config('app.name'))
 
 @section('content')
 <div class="container">

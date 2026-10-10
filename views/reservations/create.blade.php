@@ -62,24 +62,62 @@
                         <legend class="float-none w-auto h6 px-2 mb-2">Jadwal penggunaan</legend>
                         <p class="small text-secondary mb-3">Jam operasional 07.00 sampai 20.00 WIB dengan interval 30 menit.</p>
 
+                        @php
+                            // Rentang slot tersedia, mis. "07.00–09.00", untuk ringkasan di atas pilihan jam.
+                            $rentangTersedia = [];
+                            foreach ($slots as $slot) {
+                                if ($slot['status'] !== 'tersedia') { continue; }
+                                $akhirTerakhir = $rentangTersedia ? end($rentangTersedia)[1] : null;
+                                if ($akhirTerakhir === $slot['start']) {
+                                    $rentangTersedia[array_key_last($rentangTersedia)][1] = $slot['end'];
+                                } else {
+                                    $rentangTersedia[] = [$slot['start'], $slot['end']];
+                                }
+                            }
+                            $adaSlot = $rentangTersedia !== [];
+                        @endphp
+
                         <div class="row g-3">
                             <div class="col-12">
                                 <label for="reservation_date" class="form-label fw-medium">Tanggal reservasi</label>
                                 <input type="date" id="reservation_date" name="reservation_date"
                                        value="{{ old('reservation_date', $selectedDate) }}"
+                                       min="{{ $minDate }}" max="{{ $maxDate }}"
                                        class="form-control @error('reservation_date') is-invalid @enderror"
                                        aria-describedby="date-help" required>
-                                <div id="date-help" class="form-text">Pilih tanggal hari ini sampai 30 hari ke depan.</div>
+                                <div id="date-help" class="form-text">
+                                    Reservasi diajukan paling lambat sehari sebelumnya: mulai besok sampai 30 hari ke depan.
+                                </div>
                                 @error('reservation_date') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+
+                            <div class="col-12" aria-live="polite">
+                                @if (! $selectedFacility)
+                                    <div class="small text-secondary">Pilih fasilitas untuk melihat jam yang masih tersedia.</div>
+                                @elseif (! $adaSlot)
+                                    <div class="alert alert-warning small mb-0">
+                                        Tidak ada slot tersedia untuk {{ $selectedFacility->name }} pada tanggal ini. Pilih tanggal lain.
+                                    </div>
+                                @else
+                                    <div class="small">
+                                        <span class="fw-semibold">Tersedia:</span>
+                                        @foreach ($rentangTersedia as [$dari, $sampai])
+                                            <span class="badge text-bg-success fw-normal">{{ str_replace(':', '.', $dari) }}–{{ str_replace(':', '.', $sampai) }}</span>
+                                        @endforeach
+                                    </div>
+                                @endif
                             </div>
 
                             <div class="col-md-6">
                                 <label for="start_time" class="form-label fw-medium">Jam mulai</label>
                                 <select id="start_time" name="start_time"
-                                        class="form-select @error('start_time') is-invalid @enderror" required>
-                                    <option value="">Pilih jam mulai</option>
-                                    @foreach ($availability->startOptions() as $time)
-                                        <option value="{{ $time }}" @selected(old('start_time') === $time)>{{ str_replace(':', '.', $time) }}</option>
+                                        class="form-select @error('start_time') is-invalid @enderror"
+                                        required @disabled(! $adaSlot)>
+                                    <option value="">{{ $selectedFacility ? ($adaSlot ? 'Pilih jam mulai' : 'Tidak ada slot tersedia') : 'Pilih fasilitas dulu' }}</option>
+                                    @foreach ($slots as $slot)
+                                        @if ($slot['status'] === 'tersedia')
+                                            <option value="{{ $slot['start'] }}" @selected(old('start_time') === $slot['start'])>{{ str_replace(':', '.', $slot['start']) }}</option>
+                                        @endif
                                     @endforeach
                                 </select>
                                 @error('start_time') <div class="invalid-feedback">{{ $message }}</div> @enderror
@@ -88,12 +126,11 @@
                             <div class="col-md-6">
                                 <label for="end_time" class="form-label fw-medium">Jam selesai</label>
                                 <select id="end_time" name="end_time"
-                                        class="form-select @error('end_time') is-invalid @enderror" required>
-                                    <option value="">Pilih jam selesai</option>
-                                    @foreach ($availability->endOptions() as $time)
-                                        <option value="{{ $time }}" @selected(old('end_time') === $time)>{{ str_replace(':', '.', $time) }}</option>
-                                    @endforeach
+                                        class="form-select @error('end_time') is-invalid @enderror"
+                                        required disabled data-lama="{{ old('end_time') }}">
+                                    <option value="">Pilih jam mulai dulu</option>
                                 </select>
+                                <div class="form-text">Hanya sampai sebelum slot berikutnya yang sudah terisi.</div>
                                 @error('end_time') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
                         </div>
@@ -135,3 +172,56 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script id="data-slot" type="application/json">@json(array_values($slots))</script>
+<script>
+    (function () {
+        const slot = JSON.parse(document.getElementById('data-slot').textContent);
+        const fasilitas = document.getElementById('facility_id');
+        const tanggal = document.getElementById('reservation_date');
+        const mulai = document.getElementById('start_time');
+        const selesai = document.getElementById('end_time');
+        const tujuan = document.getElementById('purpose');
+        const kunciTujuan = 'reservus-tujuan-reservasi';
+        const label = (jam) => jam.replace(':', '.');
+
+        // Ganti fasilitas/tanggal → muat ulang slot dari server; tujuan yang sudah diketik disimpan sementara.
+        function muatUlang() {
+            if (!fasilitas.value || !tanggal.value) { return; }
+            try { sessionStorage.setItem(kunciTujuan, tujuan.value); } catch (e) {}
+            const url = new URL(window.location.href);
+            url.searchParams.set('facility', fasilitas.value);
+            url.searchParams.set('date', tanggal.value);
+            window.location.assign(url.toString());
+        }
+        fasilitas.addEventListener('change', muatUlang);
+        tanggal.addEventListener('change', muatUlang);
+        try {
+            const simpanan = sessionStorage.getItem(kunciTujuan);
+            if (simpanan && !tujuan.value) { tujuan.value = simpanan; }
+            sessionStorage.removeItem(kunciTujuan);
+        } catch (e) {}
+
+        // Jam selesai: slot berurutan dari jam mulai, berhenti di slot pertama yang tidak tersedia.
+        function isiJamSelesai() {
+            const pilihan = selesai.dataset.lama || selesai.value;
+            selesai.innerHTML = '';
+            const indeks = slot.findIndex((s) => s.start === mulai.value);
+            if (indeks < 0) {
+                selesai.add(new Option('Pilih jam mulai dulu', ''));
+                selesai.disabled = true;
+                return;
+            }
+            selesai.add(new Option('Pilih jam selesai', ''));
+            for (let i = indeks; i < slot.length && slot[i].status === 'tersedia'; i++) {
+                selesai.add(new Option(label(slot[i].end), slot[i].end, false, slot[i].end === pilihan));
+            }
+            selesai.disabled = false;
+            selesai.dataset.lama = '';
+        }
+        mulai.addEventListener('change', isiJamSelesai);
+        isiJamSelesai();
+    })();
+</script>
+@endpush

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Antrian Laporan — '.config('app.name'))
+@section('title', 'Antrian Laporan | '.config('app.name'))
 
 @push('styles')
 <style>

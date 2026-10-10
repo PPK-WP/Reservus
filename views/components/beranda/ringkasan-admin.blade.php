@@ -58,7 +58,7 @@
                         <a href="/admin/verifications"
                            class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 py-3">
                             <div class="min-w-0">
-                                <div class="fw-semibold text-body text-truncate">{{ $pendaftar->name }}</div>
+                                <div class="fw-semibold text-truncate judul-baris">{{ $pendaftar->name }}</div>
                                 <div class="small text-secondary">
                                     {{ $pendaftar->user_type ? (\App\Models\User::USER_TYPES[$pendaftar->user_type] ?? $pendaftar->user_type) : 'Jenis belum diisi' }}
                                     · mendaftar {{ $pendaftar->created_at?->timezone('Asia/Jakarta')->diffForHumans() }}
