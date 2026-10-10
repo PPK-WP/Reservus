@@ -44,11 +44,28 @@ class ReservationController extends Controller
                 ->find($request->facility);
         }
 
+        // Pengajuan paling cepat H-1: tanggal awal & terkecil = besok, terjauh = +30 hari.
+        $hariIni = Carbon::now('Asia/Jakarta')->startOfDay();
+        $minDate = $hariIni->copy()->addDay()->toDateString();
+        $maxDate = $hariIni->copy()->addDays(AvailabilityService::MAX_DAYS_AHEAD)->toDateString();
+
+        $selectedDate = $request->query('date');
+        if (! is_string($selectedDate) || ! preg_match('/^\d{4}-\d{2}-\d{2}$/', $selectedDate)
+            || $selectedDate < $minDate || $selectedDate > $maxDate) {
+            $selectedDate = $minDate;
+        }
+
+        // Status 26 slot untuk fasilitas & tanggal terpilih; hanya slot 'tersedia' yang ditawarkan.
+        $slots = $selectedFacility ? $this->availability->slotStatuses($selectedFacility, $selectedDate) : [];
+
         return view('reservations.create', [
             'facilities' => Facility::query()->where('status', 'aktif')->orderBy('name')->get(),
             'selectedFacility' => $selectedFacility,
             'availability' => $this->availability,
-            'selectedDate' => $request->date,
+            'selectedDate' => $selectedDate,
+            'minDate' => $minDate,
+            'maxDate' => $maxDate,
+            'slots' => $slots,
         ]);
     }
 
@@ -56,7 +73,8 @@ class ReservationController extends Controller
     {
         $validated = $request->validate([
             'facility_id' => ['required', 'integer', 'exists:facilities,id'],
-            'reservation_date' => ['required', 'date_format:Y-m-d'],
+            // Pengajuan paling cepat H-1 (keputusan PM): tanggal minimal besok.
+            'reservation_date' => ['required', 'date_format:Y-m-d', 'after:today'],
             'start_time' => ['required', 'string'],
             'end_time' => ['required', 'string'],
             'purpose' => ['required', 'string', 'min:10', 'max:2000'],
@@ -65,6 +83,7 @@ class ReservationController extends Controller
             'facility_id.exists' => 'Fasilitas tidak ditemukan.',
             'reservation_date.required' => 'Tanggal reservasi wajib dipilih.',
             'reservation_date.date_format' => 'Format tanggal tidak valid.',
+            'reservation_date.after' => 'Reservasi diajukan paling lambat sehari sebelumnya. Pilih tanggal mulai besok.',
             'start_time.required' => 'Jam mulai wajib dipilih.',
             'end_time.required' => 'Jam selesai wajib dipilih.',
             'purpose.required' => 'Tujuan penggunaan wajib diisi.',
