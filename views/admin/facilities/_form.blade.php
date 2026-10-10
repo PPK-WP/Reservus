@@ -10,8 +10,8 @@
     $deskripsiLama = old('description', $facility?->description ?? '');
 @endphp
 
-<div class="card shadow-sm">
-    <div class="card-body">
+<div class="card shadow-sm border-0 rounded-4">
+    <div class="card-body p-3 p-md-4">
         <form method="POST" action="{{ $action }}" novalidate>
             @csrf
             @method($method)
@@ -63,9 +63,9 @@
                 </div>
             </div>
 
-            <div class="d-flex gap-2 mt-4">
-                <button type="submit" class="btn btn-primary">Simpan</button>
-                <a href="/admin/facilities" class="btn btn-outline-secondary">Batal</a>
+            <div class="d-flex gap-2 mt-4 flex-wrap">
+                <button type="submit" class="btn btn-primary rounded-pill px-3">Simpan</button>
+                <a href="/admin/facilities" class="btn btn-outline-secondary rounded-pill px-3">Batal</a>
             </div>
         </form>
     </div>

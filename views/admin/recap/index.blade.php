@@ -8,7 +8,7 @@
 @endphp
 
 @section('content')
-<div class="container">
+<div class="container py-2">
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
         <div>
             <h1 class="h3 mb-1">Rekap Fasilitas</h1>
@@ -16,9 +16,9 @@
         </div>
     </div>
 
-    <div class="card shadow-sm mb-4">
-        <div class="card-body">
-            <form method="GET" action="/admin/recap" class="row g-2 align-items-end">
+    <div class="card shadow-sm border-0 mb-4 rounded-4">
+        <div class="card-body p-3 p-md-4">
+            <form method="GET" action="/admin/recap" class="row g-3 align-items-end">
                 <div class="col-sm-3">
                     <label for="from" class="form-label small text-muted mb-1">Dari tanggal</label>
                     <input id="from" type="date" name="from" class="form-control" value="{{ $filter['from'] }}" maxlength="10">
@@ -35,8 +35,8 @@
                     </select>
                 </div>
                 <div class="col-sm-3 d-flex gap-2">
-                    <button type="submit" class="btn btn-outline-primary">Terapkan</button>
-                    <a href="/admin/recap" class="btn btn-outline-secondary">Reset</a>
+                    <button type="submit" class="btn btn-primary flex-fill rounded-pill">Terapkan</button>
+                    <a href="/admin/recap" class="btn btn-outline-secondary rounded-pill">Reset</a>
                 </div>
             </form>
             <p class="text-muted small mt-3 mb-0">
@@ -48,9 +48,9 @@
         </div>
     </div>
 
-    <div class="card shadow-sm mb-4">
+    <div class="card shadow-sm border-0 mb-4 rounded-4 overflow-hidden">
         <div class="table-responsive">
-            <table class="table table-bordered table-hover align-middle mb-0">
+            <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                     <tr>
                         @foreach ($rekap['header'] as $kolom)
@@ -99,9 +99,9 @@
     @if ($rekap['baris'] !== [])
         <div class="d-flex align-items-center gap-2 flex-wrap">
             <span class="text-muted small">Ekspor (format sama dengan tabel):</span>
-            <a href="{{ route('admin.recap.export', ['format' => 'csv', 'from' => $filter['from'], 'to' => $filter['to'], 'group_by' => $filter['group_by']]) }}" class="btn btn-sm btn-outline-success">CSV</a>
-            <a href="{{ route('admin.recap.export', ['format' => 'xlsx', 'from' => $filter['from'], 'to' => $filter['to'], 'group_by' => $filter['group_by']]) }}" class="btn btn-sm btn-outline-success">XLSX</a>
-            <a href="{{ route('admin.recap.export', ['format' => 'pdf', 'from' => $filter['from'], 'to' => $filter['to'], 'group_by' => $filter['group_by']]) }}" class="btn btn-sm btn-outline-danger">PDF</a>
+            <a href="{{ route('admin.recap.export', ['format' => 'csv', 'from' => $filter['from'], 'to' => $filter['to'], 'group_by' => $filter['group_by']]) }}" class="btn btn-sm btn-outline-success rounded-pill">CSV</a>
+            <a href="{{ route('admin.recap.export', ['format' => 'xlsx', 'from' => $filter['from'], 'to' => $filter['to'], 'group_by' => $filter['group_by']]) }}" class="btn btn-sm btn-outline-success rounded-pill">XLSX</a>
+            <a href="{{ route('admin.recap.export', ['format' => 'pdf', 'from' => $filter['from'], 'to' => $filter['to'], 'group_by' => $filter['group_by']]) }}" class="btn btn-sm btn-outline-danger rounded-pill">PDF</a>
         </div>
     @endif
 </div>
