@@ -29,7 +29,7 @@
                     </select>
                 </div>
                 <div class="col-sm-3 d-flex gap-2">
-                    <button type="submit" class="btn btn-outline-primary">Saring</button>
+                    <button type="submit" class="btn btn-primary px-4">Saring</button>
                     @if ($keyword !== '' || $filterStatus)
                         <a href="/admin/facilities" class="btn btn-outline-secondary">Reset</a>
                     @endif

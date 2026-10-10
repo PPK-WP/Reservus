@@ -12,7 +12,7 @@
     </div>
 
     {{-- Filter bar (alur Booking.com): seluruh kriteria bersifat opsional --}}
-    <div class="card shadow-sm border-0 mb-4">
+    <div class="card shadow-sm border-0 mb-4 rounded-4">
         <div class="card-body p-3 p-md-4">
             <form method="GET" action="/facilities" class="row g-3 align-items-end">
                 <div class="col-sm-6 col-lg-3">
@@ -44,7 +44,7 @@
                            class="form-control" min="1" step="1" placeholder="mis. 30">
                 </div>
                 <div class="col-sm-6 col-lg-2 d-flex gap-2">
-                    <button type="submit" class="btn btn-primary flex-fill">Saring</button>
+                    <button type="submit" class="btn btn-primary px-4">Saring</button>
                     @if ($filter['type'] || $filter['location'] || $filter['min_capacity'] || $filter['q'])
                         <a href="/facilities" class="btn btn-outline-secondary">Reset</a>
                     @endif

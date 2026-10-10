@@ -35,8 +35,10 @@
                     </select>
                 </div>
                 <div class="col-sm-3 d-flex gap-2">
-                    <button type="submit" class="btn btn-primary flex-fill rounded-pill">Terapkan</button>
-                    <a href="/admin/recap" class="btn btn-outline-secondary rounded-pill">Reset</a>
+                    <button type="submit" class="btn btn-primary px-4">Saring</button>
+                    @if (request()->hasAny(['from', 'to', 'group_by']))
+                        <a href="/admin/recap" class="btn btn-outline-secondary">Reset</a>
+                    @endif
                 </div>
             </form>
             <p class="text-muted small mt-3 mb-0">

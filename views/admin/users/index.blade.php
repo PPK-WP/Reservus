@@ -29,22 +29,11 @@
         </a>
     </div>
 
-    <div class="card mb-4">
-        <div class="card-header bg-white py-3">
-            <div class="d-flex align-items-center gap-3">
-                <span class="ikon-kotak flex-shrink-0" aria-hidden="true">
-                    <x-ikon nama="search" />
-                </span>
-                <div>
-                    <h2 class="h6 mb-1">Saring daftar akun</h2>
-                    <p class="small text-secondary mb-0">Persempit daftar berdasarkan peran dan status akses.</p>
-                </div>
-            </div>
-        </div>
-        <div class="card-body">
+    <div class="card shadow-sm border-0 mb-4 rounded-4">
+        <div class="card-body p-3 p-md-4">
             <form method="GET" action="/admin/users" class="row g-3 align-items-end">
                 <div class="col-sm-6 col-lg-4">
-                    <label for="role" class="form-label fw-medium">Peran</label>
+                    <label for="role" class="form-label small text-muted mb-1">Peran</label>
                     <select id="role" name="role" class="form-select">
                         <option value="">Semua peran</option>
                         @foreach (\App\Models\User::ROLES as $nilai => $label)
@@ -53,7 +42,7 @@
                     </select>
                 </div>
                 <div class="col-sm-6 col-lg-4">
-                    <label for="status" class="form-label fw-medium">Status</label>
+                    <label for="status" class="form-label small text-muted mb-1">Status</label>
                     <select id="status" name="status" class="form-select">
                         <option value="">Semua status</option>
                         @foreach (\App\Models\User::STATUSES as $nilai => $label)
@@ -61,10 +50,10 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-lg-4 d-flex flex-column flex-sm-row gap-2">
-                    <button type="submit" class="btn btn-outline-primary">Terapkan saringan</button>
+                <div class="col-lg-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary px-4">Saring</button>
                     @if ($filterRole || $filterStatus)
-                        <a href="/admin/users" class="btn btn-link text-decoration-none">Hapus saringan</a>
+                        <a href="/admin/users" class="btn btn-outline-secondary">Reset</a>
                     @endif
                 </div>
             </form>
