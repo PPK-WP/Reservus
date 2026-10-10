@@ -4,21 +4,65 @@
     <meta charset="utf-8">
     <title>Rekap Fasilitas — Reservus</title>
     <style>
-        body { font-family: "DejaVu Sans", sans-serif; font-size: 10px; color: #1f2937; }
-        h1 { font-size: 15px; margin: 0 0 2px; }
-        .meta { color: #6b7280; margin-bottom: 12px; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #d1d5db; padding: 4px 6px; text-align: left; }
-        th { background: #f3f4f6; }
-        .num { text-align: right; }
-        .total td { background: #f3f4f6; font-weight: bold; }
+        body {
+            font-family: "DejaVu Sans", sans-serif;
+            font-size: 9px;
+            color: #1f2937;
+            margin: 18px;
+            background: #ffffff;
+        }
+        .header {
+            border-bottom: 2px solid #0047AB;
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+        }
+        h1 {
+            font-size: 16px;
+            margin: 0 0 4px;
+            color: #00337A;
+        }
+        .meta {
+            color: #4b5563;
+            font-size: 9px;
+            line-height: 1.5;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+        th, td {
+            border: 1px solid #d1d5db;
+            padding: 5px 6px;
+            text-align: left;
+            vertical-align: top;
+            word-wrap: break-word;
+        }
+        th {
+            background: #e8eff9;
+            color: #00337A;
+            font-weight: 700;
+        }
+        .num {
+            text-align: right;
+            white-space: nowrap;
+        }
+        .total td {
+            background: #f3f4f6;
+            font-weight: 700;
+        }
+        .muted {
+            color: #6b7280;
+        }
     </style>
 </head>
 <body>
-    <h1>Rekap Fasilitas — {{ $filter['group_by'] === 'location' ? 'per Lokasi' : 'per Fasilitas' }}</h1>
-    <div class="meta">
-        Periode {{ $filter['from'] }} s.d. {{ $filter['to'] }} ({{ $rekap['jumlah_hari'] }} hari)
-        · Dicetak {{ \Illuminate\Support\Carbon::now('Asia/Jakarta')->format('d-m-Y H:i') }} WIB
+    <div class="header">
+        <h1>Rekap Fasilitas — {{ $filter['group_by'] === 'location' ? 'per Lokasi' : 'per Fasilitas' }}</h1>
+        <div class="meta">
+            Periode {{ $filter['from'] }} s.d. {{ $filter['to'] }} ({{ $rekap['jumlah_hari'] }} hari)
+            · Dicetak {{ \Illuminate\Support\Carbon::now('Asia/Jakarta')->format('d-m-Y H:i') }} WIB
+        </div>
     </div>
     <table>
         <thead>

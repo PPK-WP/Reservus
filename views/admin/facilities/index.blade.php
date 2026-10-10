@@ -3,18 +3,18 @@
 @section('title', 'Kelola Fasilitas — '.config('app.name'))
 
 @section('content')
-<div class="container">
+<div class="container py-2">
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
         <div>
             <h1 class="h3 mb-1">Kelola Fasilitas</h1>
             <p class="text-muted mb-0">Daftar fasilitas kampus beserta statusnya.</p>
         </div>
-        <a href="/admin/facilities/create" class="btn btn-primary">+ Tambah Fasilitas</a>
+        <a href="/admin/facilities/create" class="btn btn-primary rounded-pill px-3">+ Tambah Fasilitas</a>
     </div>
 
-    <div class="card shadow-sm mb-4">
-        <div class="card-body">
-            <form method="GET" action="/admin/facilities" class="row g-2 align-items-end">
+    <div class="card shadow-sm border-0 mb-4 rounded-4">
+        <div class="card-body p-3 p-md-4">
+            <form method="GET" action="/admin/facilities" class="row g-3 align-items-end">
                 <div class="col-sm-5">
                     <label for="q" class="form-label small text-muted mb-1">Cari nama / lokasi</label>
                     <input id="q" type="text" name="q" class="form-control" value="{{ $keyword }}" maxlength="100" placeholder="mis. R-101, Gedung A">
@@ -38,7 +38,7 @@
         </div>
     </div>
 
-    <div class="card shadow-sm">
+    <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
@@ -60,16 +60,18 @@
                             <td>{{ $facility->capacity }}</td>
                             <td><x-status-badge :status="$facility->status" /></td>
                             <td class="text-end">
-                                <a href="/admin/facilities/{{ $facility->id }}/edit" class="btn btn-sm btn-outline-primary">Edit</a>
-                                <button type="button" class="btn btn-sm {{ $facility->status === 'nonaktif' ? 'btn-outline-success' : 'btn-outline-warning' }}"
-                                    data-bs-toggle="modal" data-bs-target="#modalToggle"
-                                    data-action="{{ route('admin.facilities.toggle', $facility) }}"
-                                    data-name="{{ $facility->name }}"
-                                    data-status="{{ $facility->status }}"
-                                    data-warning="{{ $peringatan->get($facility->id, 0) }}"
-                                    data-activate="{{ $facility->status === 'nonaktif' ? '1' : '0' }}">
-                                    {{ $facility->status === 'nonaktif' ? 'Aktifkan' : 'Nonaktifkan' }}
-                                </button>
+                                <div class="d-flex justify-content-end gap-2 flex-wrap">
+                                    <a href="/admin/facilities/{{ $facility->id }}/edit" class="btn btn-sm btn-outline-primary rounded-pill">Edit</a>
+                                    <button type="button" class="btn btn-sm {{ $facility->status === 'nonaktif' ? 'btn-outline-success' : 'btn-outline-warning' }} rounded-pill"
+                                        data-bs-toggle="modal" data-bs-target="#modalToggle"
+                                        data-action="{{ route('admin.facilities.toggle', $facility) }}"
+                                        data-name="{{ $facility->name }}"
+                                        data-status="{{ $facility->status }}"
+                                        data-warning="{{ $peringatan->get($facility->id, 0) }}"
+                                        data-activate="{{ $facility->status === 'nonaktif' ? '1' : '0' }}">
+                                        {{ $facility->status === 'nonaktif' ? 'Aktifkan' : 'Nonaktifkan' }}
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                     @empty
@@ -84,7 +86,7 @@
         </div>
 
         @if ($facilities->hasPages())
-            <div class="card-footer bg-white">{{ $facilities->links() }}</div>
+            <div class="card-footer bg-white border-0 pt-3 pb-4">{{ $facilities->links() }}</div>
         @endif
     </div>
 
@@ -95,22 +97,22 @@
 </div>
 
 <div class="modal fade" id="modalToggle" tabindex="-1" aria-labelledby="judulToggle" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <form method="POST" id="formToggle" action="">
             @csrf
             @method('PATCH')
-            <div class="modal-content">
-                <div class="modal-header">
+            <div class="modal-content rounded-4 border-0 shadow">
+                <div class="modal-header border-0 pb-2">
                     <h5 class="modal-title" id="judulToggle">Konfirmasi Perubahan Status</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body">
                     <p id="teksToggle" class="mb-0"></p>
-                    <div id="peringatanToggle" class="alert alert-warning d-none mt-3 mb-0"></div>
+                    <div id="peringatanToggle" class="alert alert-warning d-none mt-3 mb-0 rounded-4"></div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" id="tombolToggle" class="btn btn-warning">Ya, lanjutkan</button>
+                <div class="modal-footer border-0 pt-2">
+                    <button type="button" class="btn btn-link text-decoration-none text-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" id="tombolToggle" class="btn btn-warning rounded-pill">Ya, lanjutkan</button>
                 </div>
             </div>
         </form>
@@ -144,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (aktifkan) {
             teks.textContent = 'Anda yakin mengaktifkan kembali fasilitas "' + nama + '"? Fasilitas aktif kembali dapat direservasi pengguna.';
             kotakPeringatan.classList.add('d-none');
-            tombolKirim.className = 'btn btn-success';
+            tombolKirim.className = 'btn btn-success rounded-pill';
             tombolKirim.textContent = 'Ya, Aktifkan';
         } else {
             teks.textContent = 'Fasilitas "' + nama + '" akan dinonaktifkan dan tidak lagi tampil di katalog publik.';
@@ -154,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 kotakPeringatan.classList.add('d-none');
             }
-            tombolKirim.className = 'btn btn-warning';
+            tombolKirim.className = 'btn btn-warning rounded-pill';
             tombolKirim.textContent = 'Ya, Nonaktifkan';
         }
     });

@@ -3,7 +3,7 @@
 @section('title', 'Katalog Fasilitas — '.config('app.name'))
 
 @section('content')
-<div class="container">
+<div class="container py-2">
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
         <div>
             <h1 class="h3 mb-1">Katalog Fasilitas</h1>
@@ -12,9 +12,9 @@
     </div>
 
     {{-- Filter bar (alur Booking.com): seluruh kriteria bersifat opsional --}}
-    <div class="card shadow-sm mb-4">
-        <div class="card-body">
-            <form method="GET" action="/facilities" class="row g-2 align-items-end">
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body p-3 p-md-4">
+            <form method="GET" action="/facilities" class="row g-3 align-items-end">
                 <div class="col-sm-6 col-lg-3">
                     <label for="q" class="form-label small text-muted mb-1">Kata kunci nama</label>
                     <input id="q" type="search" name="q" value="{{ $filter['q'] }}"
@@ -54,40 +54,48 @@
     </div>
 
     @if ($facilities->isEmpty())
-        <div class="alert alert-light border text-center py-4 mb-0">
-            <p class="mb-2">Tidak ada fasilitas yang cocok dengan saringan ini.</p>
+        <div class="alert alert-light border text-center py-4 mb-0 rounded-4">
+            <p class="mb-2 fw-semibold">Tidak ada fasilitas yang cocok dengan saringan ini.</p>
             <a href="/facilities" class="btn btn-outline-primary btn-sm">Tampilkan semua fasilitas</a>
         </div>
     @else
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 mb-4">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4">
             @foreach ($facilities as $facility)
                 <div class="col">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body d-flex flex-column">
-                            <div class="d-flex justify-content-between align-items-start gap-2">
-                                <div>
-                                    <span class="badge text-bg-light border">{{ \App\Models\Facility::TYPES[$facility->type] ?? $facility->type }}</span>
-                                    <h2 class="h6 fw-bold mt-2 mb-0">{{ $facility->name }}</h2>
+                    <div class="card card-interaktif h-100 shadow-sm border-0 overflow-hidden rounded-4">
+                        <x-facility-photo :facility="$facility" class="border-bottom" ratio="4x3" />
+
+                        <div class="card-body d-flex flex-column p-3 p-md-4">
+                            <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                                <div class="min-w-0">
+                                    <span class="badge text-bg-light border rounded-pill px-2 py-1">{{ \App\Models\Facility::TYPES[$facility->type] ?? $facility->type }}</span>
+                                    <h2 class="h5 fw-bold mt-2 mb-0 text-truncate">{{ $facility->name }}</h2>
                                 </div>
                                 <x-status-badge :status="$facility->status" />
                             </div>
 
-                            <p class="small text-muted mb-2 mt-2">
-                                Lokasi: {{ $facility->location }}<br>
-                                Kapasitas: {{ $facility->capacity }} orang
-                            </p>
+                            <div class="small text-muted mb-3">
+                                <div class="d-flex align-items-center gap-2 mb-1">
+                                    <span class="text-secondary">📍</span>
+                                    <span>{{ $facility->location }}</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="text-secondary">👥</span>
+                                    <span>{{ $facility->capacity }} orang</span>
+                                </div>
+                            </div>
 
                             <div class="mt-auto">
-                                <div class="d-flex justify-content-between small mb-1">
+                                <div class="d-flex justify-content-between align-items-center small mb-2">
                                     <span class="text-muted">Slot tersedia hari ini</span>
-                                    <span class="fw-semibold">{{ $facility->slot_tersedia_hari_ini }}/{{ $totalSlot }}</span>
+                                    <span class="fw-semibold text-primary">{{ $facility->slot_tersedia_hari_ini }}/{{ $totalSlot }}</span>
                                 </div>
-                                <div class="progress mb-3" style="height: 6px;" role="img"
+                                <div class="progress mb-3 rounded-pill overflow-hidden" style="height: 8px;" role="img"
                                      aria-label="{{ $facility->slot_tersedia_hari_ini }} dari {{ $totalSlot }} slot tersedia">
                                     <div class="progress-bar {{ $facility->slot_tersedia_hari_ini > 0 ? 'bg-success' : 'bg-secondary' }}"
                                          style="width: {{ $totalSlot > 0 ? round($facility->slot_tersedia_hari_ini / $totalSlot * 100) : 0 }}%"></div>
                                 </div>
-                                <a href="/facilities/{{ $facility->id }}" class="btn btn-outline-primary w-100">
+                                <a href="/facilities/{{ $facility->id }}" class="btn btn-outline-primary w-100 rounded-pill">
                                     Lihat ketersediaan
                                 </a>
                             </div>
@@ -98,7 +106,7 @@
         </div>
 
         @if ($facilities->hasPages())
-            <div>{{ $facilities->links() }}</div>
+            <div class="d-flex justify-content-center">{{ $facilities->links() }}</div>
         @endif
     @endif
 </div>
