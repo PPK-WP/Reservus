@@ -3,48 +3,52 @@
     $laporanBaru = \App\Models\Report::with(['user', 'facility'])
         ->whereIn('status', ['baru', 'diproses'])
         ->oldest()
-        ->limit(10)
+        ->limit(5)
         ->get();
 
     $jumlahBaru = \App\Models\Report::status('baru')->count();
     $jumlahDiproses = \App\Models\Report::status('diproses')->count();
 @endphp
 
-<div class="mb-2">
-    <span class="badge text-bg-primary">{{ $jumlahBaru }} baru</span>
-    <span class="badge text-bg-info">{{ $jumlahDiproses }} diproses</span>
-</div>
-
 @if ($laporanBaru->isEmpty())
-    <p class="text-muted mb-0">Tidak ada laporan yang perlu ditindaklanjuti.</p>
+    <div class="text-center py-3">
+        <span class="ikon-kotak mb-3" aria-hidden="true">
+            <x-ikon nama="inbox" ukuran="1.3rem" />
+        </span>
+        <p class="text-secondary mb-0">Tidak ada laporan yang perlu ditindaklanjuti.</p>
+    </div>
 @else
+    <div class="d-flex justify-content-between align-items-center gap-3 mb-2">
+        <p class="small text-secondary mb-0">Laporan terbaru yang perlu ditangani</p>
+        <div class="d-flex gap-1">
+            <span class="badge text-bg-primary">{{ $jumlahBaru }} baru</span>
+            <span class="badge text-bg-info text-white">{{ $jumlahDiproses }} diproses</span>
+        </div>
+    </div>
+
     <div class="list-group list-group-flush">
         @foreach ($laporanBaru as $laporan)
-            <a href="/petugas/reports/{{ $laporan->id }}"
-               class="list-group-item list-group-item-action px-0">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                        <div class="fw-semibold">{{ $laporan->facility->name }}</div>
-                        <small class="text-muted">
-                            {{ \App\Models\Report::CATEGORIES[$laporan->category] ?? $laporan->category }}
-                            · {{ $laporan->user->name }}
-                        </small>
-                        <div class="small text-muted mt-1">{{ Str::limit($laporan->description, 80) }}</div>
+            <a href="{{ route('petugas.reports.show', $laporan) }}"
+               class="list-group-item list-group-item-action px-0 py-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="bg-kobalt-muda rounded-2 text-primary text-center flex-shrink-0 px-2 py-1">
+                        <strong class="d-block lh-1">{{ $laporan->created_at->format('d') }}</strong>
+                        <small>{{ $laporan->created_at->format('m/Y') }}</small>
                     </div>
-                    <div class="text-end ms-2">
+                    <div class="min-w-0 flex-grow-1">
+                        <strong class="d-block text-truncate">{{ $laporan->facility->name }}</strong>
+                        <span class="small text-secondary d-block text-truncate">
+                            {{ \App\Models\Report::CATEGORIES[$laporan->category] ?? $laporan->category }} · {{ $laporan->user->name }}
+                        </span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 flex-shrink-0">
                         <x-status-badge :status="$laporan->status" />
-                        @if ($laporan->photo)
-                            <div class="mt-1"><span class="badge text-bg-light text-dark">📷</span></div>
-                        @endif
+                        <div class="text-primary" aria-hidden="true">
+                            <x-ikon nama="arrow-right" />
+                        </div>
                     </div>
                 </div>
             </a>
         @endforeach
     </div>
-
-    @if ($jumlahBaru + $jumlahDiproses > 10)
-        <div class="mt-2 text-center">
-            <a href="/petugas/reports" class="small">Lihat semua →</a>
-        </div>
-    @endif
 @endif
