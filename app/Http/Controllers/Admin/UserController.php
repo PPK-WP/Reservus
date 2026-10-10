@@ -70,7 +70,8 @@ class UserController extends Controller
                 'required_if:role,pengguna',
                 Rule::in(array_keys(User::USER_TYPES)),
             ],
-            'identity_number' => ['nullable', 'string', 'max:30'],
+            // NIM/NIP hanya angka (tanpa huruf, spasi, atau tanda baca).
+            'identity_number' => ['nullable', 'string', 'max:30', 'regex:/^[0-9]+$/'],
         ]);
 
         $user = new User;
