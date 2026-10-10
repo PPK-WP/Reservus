@@ -18,6 +18,10 @@
             @if ($keterangan)
                 <div class="small text-secondary d-none d-sm-block">{{ $keterangan }}</div>
             @endif
+            @if ($href)
+                {{-- Penanda yang selalu terlihat, juga di layar sentuh --}}
+                <div class="tanda-buka mt-1" aria-hidden="true">Lihat <x-ikon nama="arrow-right" ukuran="0.9em" class="ikon-panah" /></div>
+            @endif
         </div>
     </div>
 </div>
