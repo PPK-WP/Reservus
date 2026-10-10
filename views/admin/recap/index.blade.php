@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Rekap Fasilitas — '.config('app.name'))
+@section('title', 'Rekap Fasilitas | '.config('app.name'))
 
 @php
     $kategori = array_keys(\App\Models\Report::CATEGORIES);
